@@ -1,7 +1,6 @@
 package com.mes.adapter.in.web.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -24,7 +23,8 @@ public class JwtTokenProvider {
     private int refreshExpirationMs;
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        // JWT secret이 Base64 형식이 아닌 일반 문자열인 경우 직접 바이트 배열로 변환
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
     public String generateToken(Authentication authentication) {
