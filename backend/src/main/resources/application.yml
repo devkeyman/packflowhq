@@ -1,38 +1,32 @@
+# ========================================
+# 공통 설정 (모든 프로파일에서 공유)
+# ========================================
 spring:
     application:
         name: mes-inno
-    datasource:
-        url: jdbc:mysql://localhost:3306/mes_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
-        username: admin
-        password: inno0000
-        driver-class-name: com.mysql.cj.jdbc.Driver
-
+    
+    # 기본 활성 프로파일 설정 (개발 환경)
+    profiles:
+        active: loc  # 기본값: dev, 실행 시 변경 가능
+    
+    # JPA 공통 설정
     jpa:
-        hibernate:
-            ddl-auto: update  # 테이블 자동 생성/업데이트
-        show-sql: true  # SQL 쿼리 출력
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL8Dialect
-                format_sql: true  # SQL 포맷팅
+                format_sql: true
         defer-datasource-initialization: true
-
+    
+    # 정적 리소스 설정
     web:
         resources:
             static-locations: classpath:/static/
             cache-period: 3600
 
+# 서블릿 컨텍스트 경로
 server:
-    port: 8080
     servlet:
         context-path: /
-
-logging:
-    level:
-        com.mes: DEBUG  # ?? ??? ?? ??
-        org.springframework.web: DEBUG  # Spring Web ??
-        org.hibernate.SQL: DEBUG  # SQL ??
-        org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # ???? ??
 
 # JWT Settings
 jwt:

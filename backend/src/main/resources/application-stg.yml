@@ -1,0 +1,105 @@
+# ========================================
+# 스테이징 환경 설정 (Staging)
+# ========================================
+
+spring:
+    # 데이터베이스 설정 (스테이징 DB)
+    datasource:
+        url: jdbc:mysql://stg-db-server:3306/mes_db_stg?useSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+        username: ${DB_USERNAME:mes_stg_user}  # 환경 변수 또는 기본값
+        password: ${DB_PASSWORD:stg_password}  # 환경 변수 또는 기본값
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        hikari:
+            maximum-pool-size: 10
+            minimum-idle: 5
+            connection-timeout: 30000
+            idle-timeout: 600000
+    
+    # JPA 설정 (스테이징 환경)
+    jpa:
+        hibernate:
+            ddl-auto: validate  # 스키마 검증만 수행
+        show-sql: false  # SQL 쿼리 미출력
+        properties:
+            hibernate:
+                show_sql: false
+                generate_statistics: true
+                jdbc:
+                    batch_size: 25
+                order_inserts: true
+    
+    # DevTools 비활성화
+    devtools:
+        restart:
+            enabled: false
+        livereload:
+            enabled: false
+
+# 서버 포트 (스테이징)
+server:
+    port: 8081
+    compression:
+        enabled: true
+        mime-types: application/json,application/xml,text/html,text/xml,text/plain
+
+# 로깅 설정 (스테이징 - 중간 레벨)
+logging:
+    level:
+        root: INFO
+        com.mes: INFO
+        org.springframework.web: INFO
+        org.springframework.security: INFO
+        org.hibernate.SQL: WARN
+    pattern:
+        console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file:
+        name: logs/mes-stg.log
+        max-size: 50MB
+        max-history: 30
+
+# JWT Settings (스테이징용 - 중간 만료 시간)
+jwt:
+    secret: ${JWT_SECRET:stg-secret-key-9F86D081884C7D659A2FEAA0C55AD015A3BF4F1B2B0B822CD15D6C15B0F00A08}
+    expiration: 43200000  # 12 hours
+    refresh-expiration: 2592000000  # 30 days
+
+# CORS 설정 (스테이징 환경 - 특정 도메인만 허용)
+cors:
+    allowed-origins: 
+        - "https://stg.mes-system.com"
+        - "https://staging.mes-system.com"
+    allowed-methods: 
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+
+# 모니터링 설정 (스테이징)
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,metrics,prometheus
+    endpoint:
+        health:
+            show-details: when-authorized
+    metrics:
+        export:
+            prometheus:
+                enabled: true
+
+# 캐시 설정 (스테이징)
+spring.cache:
+    type: simple
+    cache-names: users,workorders,issues
+
+# 스테이징 환경 전용 설정
+app:
+    environment: staging
+    debug-mode: false
+    mock-data: false
+    api-docs-enabled: true
+    performance-monitoring: true
