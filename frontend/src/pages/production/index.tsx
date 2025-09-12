@@ -80,7 +80,7 @@ const ProductionPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md font-medium">
-              작업 지시서 {workOrders?.length || 0}건
+              작업 지시서 {workOrders?.data?.length || 0}건
             </span>
           </div>
         </div>

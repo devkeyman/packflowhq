@@ -285,7 +285,7 @@ EXIT;
 
 ```bash
 # 이미 클론한 프로젝트 디렉토리로 이동
-cd /opt/mes/smart-factory-mes
+cd /opt/mes/mes-inno
 
 # Frontend 빌드
 cd frontend

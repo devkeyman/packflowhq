@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Read(//Users/gimmunjong/Documents/programming/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

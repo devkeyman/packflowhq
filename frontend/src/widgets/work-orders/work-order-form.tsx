@@ -5,12 +5,10 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Select } from "@/shared/components/ui/select";
-import { Card } from "@/shared/components/ui/card";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/shared/components/ui/sheet";
 import { useWorkOrderStore } from "@/features/work-orders/stores/work-order-store";
 import { useCreateWorkOrder, useUpdateWorkOrder } from "@/features/work-orders/hooks";
 import { CreateWorkOrderRequest, UpdateWorkOrderRequest, WorkOrderPriority } from "@/entities/work-order";
-import { X } from "lucide-react";
 
 interface WorkOrderFormData {
   title: string;
@@ -75,7 +73,7 @@ export const WorkOrderForm: React.FC = () => {
   };
 
   return (
-    <Sheet open={isFormOpen} onOpenChange={closeForm}>
+    <Sheet open={isFormOpen} onClose={closeForm}>
       <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
         <SheetHeader>
           <SheetTitle>

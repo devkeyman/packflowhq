@@ -55,7 +55,7 @@ export const WorkOrderDetail: React.FC = () => {
   return (
     <Sheet 
       open={!!selectedWorkOrder} 
-      onOpenChange={(open) => !open && setSelectedWorkOrder(null)}
+      onClose={() => setSelectedWorkOrder(null)}
     >
       <SheetContent className="w-full sm:max-w-2xl overflow-y-auto">
         <SheetHeader>

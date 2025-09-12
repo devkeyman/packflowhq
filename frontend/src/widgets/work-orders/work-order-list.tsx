@@ -109,7 +109,7 @@ export const WorkOrderList: React.FC = () => {
           <div className="flex gap-2">
             <Select
               value={filters.status || "ALL"}
-              onValueChange={handleStatusFilter}
+              onChange={(e) => handleStatusFilter(e.target.value as WorkOrderStatus | "ALL")}
             >
               <option value="ALL">모든 상태</option>
               <option value="PENDING">대기중</option>
@@ -120,7 +120,7 @@ export const WorkOrderList: React.FC = () => {
             
             <Select
               value={filters.priority || "ALL"}
-              onValueChange={handlePriorityFilter}
+              onChange={(e) => handlePriorityFilter(e.target.value as WorkOrderPriority | "ALL")}
             >
               <option value="ALL">모든 우선순위</option>
               <option value="LOW">낮음</option>

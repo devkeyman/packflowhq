@@ -76,10 +76,10 @@ const IssuesPage: React.FC = () => {
           </div>
           <div className="flex items-center gap-2 text-sm">
             <span className="px-2 py-1 bg-yellow-50 text-yellow-700 rounded-md font-medium">
-              미해결 {issues?.filter(i => i.status === 'OPEN').length || 0}건
+              미해결 {issues?.data?.filter((i: Issue) => i.status === 'OPEN').length || 0}건
             </span>
             <span className="px-2 py-1 bg-green-50 text-green-700 rounded-md font-medium">
-              해결완료 {issues?.filter(i => i.status === 'RESOLVED').length || 0}건
+              해결완료 {issues?.data?.filter((i: Issue) => i.status === 'RESOLVED').length || 0}건
             </span>
           </div>
         </div>
