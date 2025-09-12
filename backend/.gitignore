@@ -33,12 +33,12 @@ build/
 .vscode/
 
 ### Application Properties ###
-#application-local.properties
-#application-local.yml
-#application-prod.properties
-#application-prod.yml
-#application-dev.properties
-#application-dev.yml
+application-local.properties
+application-local.yml
+application-prod.properties
+application-prod.yml
+application-dev.properties
+application-dev.yml
 
 ### Security ###
 *.p12
