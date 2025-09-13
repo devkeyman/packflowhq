@@ -1,10 +1,10 @@
-# Smart Factory MES (Manufacturing Execution System)
+# Innopackage - Smart Factory MES (Manufacturing Execution System)
 
-스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관리, 작업 지시, 품질 이슈 추적을 위한 통합 플랫폼
+이노패키지 스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관리, 작업 지시, 품질 이슈 추적을 위한 통합 플랫폼
 
 ## 📋 프로젝트 개요
 
-Smart Factory MES는 제조 현장의 생산 활동을 실시간으로 모니터링하고 관리하는 웹 기반 시스템입니다. 작업 지시서 관리, 생산 진행 상황 추적, 품질 이슈 관리 등의 기능을 제공하여 제조 현장의 효율성을 극대화합니다.
+Innopackage - Smart Factory MES는 제조 현장의 생산 활동을 실시간으로 모니터링하고 관리하는 웹 기반 시스템입니다. 작업 지시서 관리, 생산 진행 상황 추적, 품질 이슈 관리 등의 기능을 제공하여 제조 현장의 효율성을 극대화합니다.
 
 ### 🎯 Quick Start (빠른 시작)
 
@@ -170,32 +170,42 @@ npm run dev
 
 ## 🚢 프로덕션 배포 가이드
 
-### 배포 옵션
+### 배포 아키텍처
 
-#### 옵션 1: Ubuntu EC2 배포 (AWS)
-#### 옵션 2: Docker 배포
-#### 옵션 3: Kubernetes 배포
+본 프로젝트는 프론트엔드와 백엔드를 완전히 분리하여 배포합니다:
 
----
+- **프론트엔드 (React)**: Nginx를 통해 정적 파일로 서빙
+- **백엔드 (Spring Boot)**: JAR 파일로 독립 실행
+- **도메인 구조**:
+  - `www.innopackage.com` → 메인 서비스
+  - `d.innopackage.com` → 개발 환경
+  - `s.innopackage.com` → 스테이징 환경
+- **라우팅 구조**:
+  - `/` → React 앱 (Nginx가 정적 파일 서빙)
+  - `/login`, `/dashboard` 등 → React Router가 클라이언트 사이드 라우팅 처리
+  - `/api/*` → Spring Boot API 엔드포인트
+- **확장성**: 각 컴포넌트가 독립적으로 스케일링 가능
+
 
 ## 📦 Ubuntu EC2 배포 (상세 가이드)
 
 ### 사전 준비
 
-#### 1. AWS 계정 및 EC2 인스턴스 준비
+#### 1. AWS 계정 및 EC2 인스턴스 정보
 
-- **인스턴스 타입**: t3.small 이상 권장 (최소 2GB RAM)
+- **인스턴스 타입**: t3.small
 - **OS**: Ubuntu 22.04 LTS
-- **스토리지**: 20GB 이상
+- **IP 주소**: 13.209.192.235
+- **키페어**: innopackage-smart-factory-mes.pem
+- **도메인**: 
+  - 메인: www.innopackage.com
+  - 개발: d.innopackage.com
+  - 스테이징: s.innopackage.com
 - **보안 그룹 인바운드 규칙**:
   - SSH (22): 관리자 IP
   - HTTP (80): 0.0.0.0/0
   - HTTPS (443): 0.0.0.0/0
-  - Spring Boot (8080): VPC 내부만 (선택사항)
-
-#### 2. 도메인 준비 (선택사항)
-- Route 53 또는 외부 도메인 제공업체에서 도메인 구매
-- EC2 Elastic IP와 도메인 연결
+  - Spring Boot (8080): VPC 내부만
 
 ### 배포 단계별 가이드
 
@@ -203,39 +213,16 @@ npm run dev
 
 ```bash
 # PEM 파일 권한 설정
-chmod 400 your-key.pem
+chmod 400 innopackage-smart-factory-mes.pem
 
 # SSH 접속
-ssh -i your-key.pem ubuntu@your-ec2-public-ip
+ssh -i innopackage-smart-factory-mes.pem ubuntu@13.209.192.235
 
 # 접속 확인
 whoami  # ubuntu가 출력되어야 함
 ```
 
-#### Step 2: 소스 코드 클론
-
-```bash
-# Git이 설치되어 있지 않은 경우 먼저 설치
-sudo apt update
-sudo apt install -y git
-
-# 프로젝트 디렉토리 생성
-sudo mkdir -p /opt/mes
-sudo chown ubuntu:ubuntu /opt/mes
-cd /opt/mes
-
-# GitHub에서 소스 코드 클론
-git clone https://github.com/devkeyman/mes-inno.git
-cd mes-inno
-
-# 특정 브랜치를 클론하려는 경우
-git clone -b branch-name https://github.com/devkeyman/mes-inno.git
-
-# Private 저장소인 경우 (Personal Access Token 사용)
-git clone https://your-token@github.com/devkeyman/mes-inno.git
-```
-
-#### Step 3: 필수 소프트웨어 설치
+#### Step 2: 필수 소프트웨어 설치
 
 ```bash
 # 시스템 업데이트
@@ -264,7 +251,7 @@ mysql --version
 nginx -v
 ```
 
-#### Step 4: MySQL 데이터베이스 설정
+#### Step 3: MySQL 데이터베이스 설정
 
 ```bash
 # MySQL 보안 설정
@@ -281,62 +268,124 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
-#### Step 5: 프로젝트 빌드 및 배포
+#### Step 4: 프로젝트 빌드 및 배포
+
+##### SCP를 이용한 배포
+
+**로컬 환경에서 빌드:**
 
 ```bash
-# 이미 클론한 프로젝트 디렉토리로 이동
-cd /opt/mes/mes-inno
+# 로컬 머신에서 프로젝트 클론
+git clone https://github.com/devkeyman/mes-inno.git
+cd mes-inno
 
 # Frontend 빌드
 cd frontend
 npm install
 npm run build
 
-# Backend static 리소스로 복사
+# Backend JAR 파일 빌드
 cd ../backend
-rm -rf src/main/resources/static/*
-cp -r ../frontend/dist/* src/main/resources/static/
-
-# application-prod.yml 설정
-cat > src/main/resources/application-prod.yml << EOF
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/mes_db
-    username: mes_user
-    password: your_secure_password
-  
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
-
-server:
-  port: 8080
-
-logging:
-  level:
-    root: INFO
-EOF
-
-# Maven Wrapper 생성 및 빌드
-mvn wrapper:wrapper
-chmod +x mvnw
 ./mvnw clean package -DskipTests
+
+# 빌드된 파일을 EC2로 업로드
+# Frontend 정적 파일 업로드
+scp -i innopackage-smart-factory-mes.pem -r ../frontend/dist/* ubuntu@13.209.192.235:/tmp/frontend/
+
+# Backend JAR 파일 업로드
+scp -i innopackage-smart-factory-mes.pem target/mes-inno-0.0.1-SNAPSHOT.jar ubuntu@13.209.192.235:/tmp/
+
+# application-prod.yml 파일 업로드 (필요시)
+scp -i innopackage-smart-factory-mes.pem src/main/resources/application-prod.yml ubuntu@13.209.192.235:/tmp/
 ```
 
-#### Step 6: Systemd 서비스 등록
+**EC2 서버에서 배포:**
+
+```bash
+# EC2에 접속
+ssh -i innopackage-smart-factory-mes.pem ubuntu@13.209.192.235
+
+# Frontend 파일 배포
+sudo rm -rf /var/www/mes/frontend/*
+sudo cp -r /tmp/frontend/* /var/www/mes/frontend/
+sudo chown -R www-data:www-data /var/www/mes/frontend
+
+# Backend JAR 파일 배포
+mv /tmp/mes-inno-0.0.1-SNAPSHOT.jar /opt/mes/backend/
+mv /tmp/application-prod.yml /opt/mes/backend/ # 필요시
+
+# 서비스 재시작
+sudo systemctl restart mes
+sudo systemctl restart nginx
+```
+
+##### 배포 스크립트 자동화 (deploy.sh)
+
+```bash
+#!/bin/bash
+# 로컬에서 실행하는 배포 스크립트
+
+# 설정
+EC2_HOST="13.209.192.235"
+EC2_USER="ubuntu"
+PEM_FILE="innopackage-smart-factory-mes.pem"
+JAR_NAME="mes-inno-0.0.1-SNAPSHOT.jar"
+
+# 빌드
+echo "Building Frontend..."
+cd frontend && npm install && npm run build
+
+echo "Building Backend..."
+cd ../backend
+./mvnw clean package -DskipTests
+
+# Frontend 배포
+echo "Deploying Frontend to EC2..."
+ssh -i $PEM_FILE $EC2_USER@$EC2_HOST "sudo mkdir -p /tmp/frontend && sudo chown ubuntu:ubuntu /tmp/frontend"
+scp -i $PEM_FILE -r ../frontend/dist/* $EC2_USER@$EC2_HOST:/tmp/frontend/
+
+# Backend 배포
+echo "Deploying Backend to EC2..."
+scp -i $PEM_FILE target/$JAR_NAME $EC2_USER@$EC2_HOST:/tmp/
+
+# EC2에서 배포 실행
+ssh -i $PEM_FILE $EC2_USER@$EC2_HOST << EOF
+  # Frontend 배포
+  sudo rm -rf /var/www/mes/frontend/*
+  sudo cp -r /tmp/frontend/* /var/www/mes/frontend/
+  sudo chown -R www-data:www-data /var/www/mes/frontend
+  
+  # Backend 배포
+  mv /tmp/$JAR_NAME /opt/mes/backend/
+  
+  # 서비스 재시작
+  sudo systemctl restart mes
+  sudo systemctl restart nginx
+  
+  # 임시 파일 정리
+  rm -rf /tmp/frontend
+  
+  echo "Deployment completed!"
+EOF
+
+echo "Checking application health..."
+sleep 10
+curl -f http://$EC2_HOST/api/actuator/health && echo "Application is running!"
+```
+
+#### Step 5: Systemd 서비스 등록
 
 ```bash
 # 서비스 파일 생성
 sudo tee /etc/systemd/system/mes.service << EOF
 [Unit]
-Description=Smart Factory MES
+Description=Innopackage - Smart Factory MES
 After=syslog.target mysql.service
 
 [Service]
 User=ubuntu
-WorkingDirectory=/opt/mes/mes-inno/backend
-ExecStart=/usr/bin/java -jar -Dspring.profiles.active=prod /opt/mes/mes-inno/backend/target/mes-inno-0.0.1-SNAPSHOT.jar
+WorkingDirectory=/opt/mes/backend
+ExecStart=/usr/bin/java -jar -Dspring.profiles.active=prod /opt/mes/backend/mes-inno-0.0.1-SNAPSHOT.jar
 SuccessExitStatus=143
 StandardOutput=journal
 StandardError=journal
@@ -354,18 +403,28 @@ sudo systemctl start mes
 sudo systemctl status mes
 ```
 
-#### Step 7: Nginx 리버스 프록시 설정
+#### Step 6: Nginx 설정
 
 ```bash
 # Nginx 설정 파일 생성
 sudo tee /etc/nginx/sites-available/mes << EOF
 server {
     listen 80;
-    server_name your-domain.com;
+    server_name www.innopackage.com d.innopackage.com s.innopackage.com;
 
     client_max_body_size 10M;
+    
+    # Frontend 정적 파일 서빙
+    root /var/www/mes/frontend;
+    index index.html;
 
+    # Frontend 라우팅 (React Router)
     location / {
+        try_files \$uri \$uri/ /index.html;
+    }
+    
+    # Backend API 프록시
+    location /api {
         proxy_pass http://localhost:8080;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
@@ -387,20 +446,22 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-#### Step 8: SSL 인증서 설정 (HTTPS)
+#### Step 7: SSL 인증서 설정 (HTTPS)
 
 ```bash
 # Certbot 설치
 sudo apt install -y certbot python3-certbot-nginx
 
-# SSL 인증서 발급
-sudo certbot --nginx -d your-domain.com
+# SSL 인증서 발급 (각 도메인별로)
+sudo certbot --nginx -d www.innopackage.com
+sudo certbot --nginx -d d.innopackage.com
+sudo certbot --nginx -d s.innopackage.com
 
 # 자동 갱신 설정
 sudo systemctl enable certbot.timer
 ```
 
-#### Step 9: 배포 확인 및 테스트
+#### Step 8: 배포 확인 및 테스트
 
 ```bash
 # 1. 서비스 상태 확인
@@ -411,86 +472,16 @@ sudo systemctl status nginx
 curl http://localhost:8080/actuator/health
 
 # 3. 웹 브라우저에서 접속 확인
-# http://your-domain.com 또는 http://your-ec2-public-ip
+# https://www.innopackage.com
+# https://d.innopackage.com
+# https://s.innopackage.com
 
 # 4. 로그 확인 (문제 발생 시)
 sudo journalctl -u mes -n 50
 sudo tail -f /var/log/nginx/error.log
 ```
 
----
 
-## 🐳 Docker 배포 (간편 배포)
-
-### Docker Compose를 이용한 배포
-
-```bash
-# 프로젝트 클론
-git clone https://github.com/devkeyman/mes-inno.git
-cd mes-inno
-
-# docker-compose.yml 파일 생성
-cat > docker-compose.yml << EOF
-version: '3.8'
-services:
-  mysql:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: mes_db
-      MYSQL_USER: mes_user
-      MYSQL_PASSWORD: mes123
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-
-  backend:
-    build: ./backend
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mes_db
-      SPRING_DATASOURCE_USERNAME: mes_user
-      SPRING_DATASOURCE_PASSWORD: mes123
-    depends_on:
-      - mysql
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-
-volumes:
-  mysql_data:
-EOF
-
-# Docker Compose 실행
-docker-compose up -d
-```
-
----
-
-## 🔨 유용한 스크립트
-
-### 자동 빌드 스크립트
-
-```bash
-# backend/scripts/build.sh 실행
-cd backend/scripts
-./build.sh
-```
-
-### 자동 배포 스크립트
-
-```bash
-# backend/scripts/deploy-ec2.sh 실행
-cd backend/scripts
-./deploy-ec2.sh prod
-```
 
 ## 📊 운영 및 모니터링
 
@@ -539,109 +530,6 @@ mysqldump -u mes_user -p mes_db > backup_$(date +%Y%m%d).sql
 0 2 * * * mysqldump -u mes_user -p'password' mes_db > /backup/mes_db_$(date +\%Y\%m\%d).sql
 ```
 
-## 🔄 경로 마이그레이션 가이드
-
-### /mes에서 /opt/mes로 이동
-
-EC2 인스턴스에서 기존 `/mes` 경로를 `/opt/mes`로 이동해야 하는 경우:
-
-#### 자동 마이그레이션 스크립트
-
-```bash
-#!/bin/bash
-# migrate_to_opt.sh
-
-# 1. 백업 생성
-sudo systemctl stop mes
-sudo tar -czf ~/mes_backup_$(date +%Y%m%d_%H%M%S).tar.gz /mes
-
-# 2. 디렉토리 이동
-[ -d "/opt/mes" ] && sudo mv /opt/mes /opt/mes_old_$(date +%Y%m%d)
-sudo mv /mes /opt/mes
-
-# 3. 서비스 설정 업데이트
-sudo sed -i 's|/mes/|/opt/mes/|g' /etc/systemd/system/mes.service
-[ -f "/etc/nginx/sites-available/mes" ] && sudo sed -i 's|/mes/|/opt/mes/|g' /etc/nginx/sites-available/mes
-
-# 4. 권한 설정
-sudo chown -R ubuntu:ubuntu /opt/mes
-chmod +x /opt/mes/mes-inno/backend/mvnw
-
-# 5. 서비스 재시작
-sudo systemctl daemon-reload
-sudo systemctl start mes
-sudo systemctl restart nginx
-
-echo "마이그레이션 완료! 새 경로: /opt/mes"
-```
-
-### /opt/mes 디렉토리 재생성
-
-기존 `/opt/mes`를 완전히 삭제하고 새로 설치하는 경우:
-
-#### 디렉토리 재생성 스크립트
-
-```bash
-#!/bin/bash
-# recreate_opt_mes.sh
-
-echo "⚠️  경고: /opt/mes가 완전히 삭제됩니다!"
-read -p "계속하시겠습니까? (yes/no): " response
-
-if [[ "$response" == "yes" ]]; then
-    # 1. 백업
-    [ -d "/opt/mes" ] && sudo tar -czf ~/opt_mes_backup_$(date +%Y%m%d_%H%M%S).tar.gz /opt/mes
-    
-    # 2. 서비스 중지
-    sudo systemctl stop mes
-    
-    # 3. 디렉토리 삭제 및 재생성
-    sudo rm -rf /opt/mes
-    sudo mkdir -p /opt/mes
-    sudo chown ubuntu:ubuntu /opt/mes
-    
-    # 4. 프로젝트 클론
-    cd /opt/mes
-    git clone https://github.com/devkeyman/mes-inno.git
-    cd mes-inno
-    
-    # 5. 빌드 및 설정
-    cd backend
-    ./mvnw clean package -DskipTests
-    
-    # 6. 서비스 재시작
-    sudo systemctl start mes
-    
-    echo "✅ 재생성 완료!"
-fi
-```
-
-#### 수동 단계별 실행
-
-```bash
-# Step 1: 백업
-sudo tar -czf ~/opt_mes_backup_$(date +%Y%m%d).tar.gz /opt/mes
-
-# Step 2: 서비스 중지
-sudo systemctl stop mes
-
-# Step 3: 삭제
-sudo rm -rf /opt/mes
-
-# Step 4: 재생성
-sudo mkdir -p /opt/mes
-sudo chown ubuntu:ubuntu /opt/mes
-
-# Step 5: 클론
-cd /opt/mes
-git clone https://github.com/devkeyman/mes-inno.git
-
-# Step 6: 권한 설정
-chmod +x /opt/mes/mes-inno/backend/mvnw
-
-# Step 7: 서비스 시작
-sudo systemctl start mes
-```
 
 ## 🔧 트러블슈팅 가이드
 
