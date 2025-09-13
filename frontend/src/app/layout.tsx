@@ -36,7 +36,9 @@ const Layout: React.FC = () => {
                 <Menu className="h-5 w-5" />
               )}
             </Button>
-            <h1 className="text-lg font-semibold">Smart MES</h1>
+            <h1 className="text-lg font-semibold">
+              Manufacturing Execution System
+            </h1>
           </div>
         </header>
 

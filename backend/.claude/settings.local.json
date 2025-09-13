@@ -4,7 +4,11 @@
       "Bash(curl:*)",
       "Bash(tree:*)",
       "Bash(mkdir:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(chmod:*)",
+      "Bash(./test-cors.sh:*)",
+      "Bash(ssh:*)"
     ],
     "deny": []
   }

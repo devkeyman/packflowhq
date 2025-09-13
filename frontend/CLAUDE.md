@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Smart Factory MES (Manufacturing Execution System) frontend built with React, TypeScript, and Vite following Feature-Sliced Design (FSD) architecture.
+Innopackage (Manufacturing Execution System) frontend built with React, TypeScript, and Vite following Feature-Sliced Design (FSD) architecture.
 
 ## Essential Commands
 

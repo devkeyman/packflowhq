@@ -41,7 +41,7 @@ const Navigation: React.FC = () => {
             <Factory className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">이노패키지</h1>
+            <h1 className="text-lg font-semibold text-gray-900">Innopackage</h1>
             <p className="text-xs text-gray-500">Smart Factory MES</p>
           </div>
         </div>

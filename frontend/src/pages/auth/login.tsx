@@ -83,8 +83,8 @@ export const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Smart Factory MES</h1>
-          <p className="text-gray-600">스마트 팩토리 제조 실행 시스템</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Innopackage</h1>
+          <p className="text-gray-600">Manufacturing Execution System</p>
         </div>
 
         <Card className="p-6 shadow-lg">
@@ -133,11 +133,17 @@ export const LoginPage: React.FC = () => {
                   {(() => {
                     const error = login.error as any;
                     // 네트워크 에러 체크 (서버 연결 실패)
-                    if (error?.code === 'ERR_NETWORK' || error?.message?.includes('Network Error')) {
+                    if (
+                      error?.code === "ERR_NETWORK" ||
+                      error?.message?.includes("Network Error")
+                    ) {
                       return "서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.";
                     }
                     // 401, 403 등 인증 에러
-                    if (error?.response?.status === 401 || error?.response?.status === 403) {
+                    if (
+                      error?.response?.status === 401 ||
+                      error?.response?.status === 403
+                    ) {
                       return "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
                     }
                     // 400 Bad Request
@@ -155,24 +161,22 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={login.isPending}
-            >
+            <Button type="submit" className="w-full" disabled={login.isPending}>
               {login.isPending ? "로그인 중..." : "로그인"}
             </Button>
           </form>
 
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-sm font-medium text-gray-700 mb-3 text-center">테스트 계정</p>
+            <p className="text-sm font-medium text-gray-700 mb-3 text-center">
+              테스트 계정
+            </p>
             <div className="space-y-2 text-sm text-gray-600">
               <div className="flex justify-between">
-                <span className="font-medium">관리자:</span> 
+                <span className="font-medium">관리자:</span>
                 <span>admin@mes.com / admin123</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-medium">작업자:</span> 
+                <span className="font-medium">작업자:</span>
                 <span>worker@mes.com / worker123</span>
               </div>
             </div>
