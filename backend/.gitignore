@@ -33,12 +33,8 @@ build/
 .vscode/
 
 ### Application Properties ###
-application-local.properties
-application-local.yml
-application-prod.properties
-application-prod.yml
-application-dev.properties
-application-dev.yml
+application*.yml
+!application.yml
 
 ### Security ###
 *.p12
@@ -116,3 +112,7 @@ yarn-error.log*
 /uploads/
 /temp/
 /tmp/
+
+### Exclude files outside backend folder ###
+../
+!./
