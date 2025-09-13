@@ -3,13 +3,19 @@ frontend/node_modules/
 frontend/dist/
 frontend/.env.local
 frontend/.env
+frontend/.env.production
+frontend/dist.tar.gz
 
-# Backend  
+# Backend
 backend/target/
 backend/.mvn/
 backend/mvnw
 backend/mvnw.cmd
 backend/src/main/resources/static/*
+backend/application*.yml
+!backend/application.yml
+backend/src/main/resources/application*.yml
+!backend/src/main/resources/application.yml
 
 # IDE
 .vscode/
@@ -28,3 +34,13 @@ logs/
 # Database
 *.db
 *.sqlite
+
+# Security
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.jks
+*.keystore
+*.truststore

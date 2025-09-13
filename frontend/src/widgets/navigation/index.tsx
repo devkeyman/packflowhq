@@ -4,14 +4,14 @@ import { useLogout } from "@/features/auth/hooks/use-auth";
 import { useAuthStore } from "@/shared/stores";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/components/ui/button";
-import { 
-  LayoutDashboard, 
-  Factory, 
-  AlertCircle, 
+import {
+  LayoutDashboard,
+  Factory,
+  AlertCircle,
   LogOut,
   ChevronRight,
   User,
-  ClipboardList
+  ClipboardList,
 } from "lucide-react";
 
 const Navigation: React.FC = () => {
@@ -41,8 +41,8 @@ const Navigation: React.FC = () => {
             <Factory className="h-4 w-4 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Smart MES</h1>
-            <p className="text-xs text-gray-500">Factory Management</p>
+            <h1 className="text-lg font-semibold text-gray-900">이노패키지</h1>
+            <p className="text-xs text-gray-500">Smart Factory MES</p>
           </div>
         </div>
       </div>
@@ -66,11 +66,13 @@ const Navigation: React.FC = () => {
               >
                 {({ isActive }) => (
                   <>
-                    <item.icon 
+                    <item.icon
                       className={cn(
                         "h-5 w-5 transition-colors",
-                        isActive ? "text-blue-700" : "text-gray-400 group-hover:text-gray-600"
-                      )} 
+                        isActive
+                          ? "text-blue-700"
+                          : "text-gray-400 group-hover:text-gray-600"
+                      )}
                     />
                     <span className="flex-1">{item.label}</span>
                     {isActive && (

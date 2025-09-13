@@ -1,8 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { useAuthStore } from "@/shared/stores";
+import { getApiBaseUrl } from "@/shared/config/api.config";
 
 // API 클라이언트 설정
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = getApiBaseUrl();
 
 // Axios 인스턴스 생성
 const apiClient: AxiosInstance = axios.create({
@@ -45,7 +46,8 @@ apiClient.interceptors.response.use(
             refreshToken,
           });
 
-          const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+            response.data;
           useAuthStore.getState().setTokens(newAccessToken, newRefreshToken);
 
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

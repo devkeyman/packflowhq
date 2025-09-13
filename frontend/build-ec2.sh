@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# EC2 환경에서 안전한 빌드를 위한 스크립트
-echo "🚀 Starting EC2 optimized build process..."
+# t3.micro EC2 환경에서 안전한 빌드를 위한 스크립트
+echo "🚀 Starting t3.micro optimized build process..."
 
-# 1. 환경 변수 설정
-export NODE_OPTIONS="--max-old-space-size=512"
-echo "✅ Node memory limit set to 512MB"
+# 1. 환경 변수 설정 (t3.micro: 1GB RAM)
+export NODE_OPTIONS="--max-old-space-size=768"
+echo "✅ Node memory limit set to 768MB (75% of 1GB)"
 
 # 2. 기존 빌드 캐시 정리
 echo "🧹 Cleaning previous build cache..."
@@ -28,8 +28,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 5. Vite 빌드 실행
-echo "🏗️ Building with Vite..."
+# 5. Vite 빌드 실행 (TypeScript 체크 스킵하여 메모리 절약)
+echo "🏗️ Building with Vite (fast mode)..."
 npx vite build --mode production
 
 # 6. 빌드 결과 확인
