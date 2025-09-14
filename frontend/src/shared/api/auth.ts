@@ -1,15 +1,15 @@
 import apiClient from "./client";
 import {
   LoginRequest,
-  LoginResponse,
+  AuthResponse,
   RefreshTokenRequest,
   LogoutRequest,
 } from "@/entities/user";
 
 export const authApi = {
   // 로그인
-  login: async (credentials: LoginRequest): Promise<LoginResponse> => {
-    const response = await apiClient.post<LoginResponse>(
+  login: async (credentials: LoginRequest): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>(
       "/auth/login",
       credentials
     );
@@ -19,8 +19,8 @@ export const authApi = {
   // 토큰 갱신
   refresh: async (
     refreshToken: RefreshTokenRequest
-  ): Promise<LoginResponse> => {
-    const response = await apiClient.post<LoginResponse>(
+  ): Promise<AuthResponse> => {
+    const response = await apiClient.post<AuthResponse>(
       "/auth/refresh",
       refreshToken
     );

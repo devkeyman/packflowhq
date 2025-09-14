@@ -4,7 +4,6 @@ import Layout from "./layout";
 import DashboardPage from "@/pages/dashboard";
 import ProductionPage from "@/pages/production";
 import IssuesPage from "@/pages/issues";
-import { WorkOrdersPage } from "@/pages/work-orders";
 import { LoginPage } from "@/pages/auth/login";
 import { ProtectedRoute } from "@/features/auth/components/protected-route";
 
@@ -28,10 +27,6 @@ const router = createBrowserRouter([
       {
         path: "production",
         element: <ProductionPage />,
-      },
-      {
-        path: "work-orders",
-        element: <WorkOrdersPage />,
       },
       {
         path: "issues",

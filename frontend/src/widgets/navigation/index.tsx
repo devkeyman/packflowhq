@@ -11,7 +11,6 @@ import {
   LogOut,
   ChevronRight,
   User,
-  ClipboardList,
 } from "lucide-react";
 
 const Navigation: React.FC = () => {
@@ -28,7 +27,6 @@ const Navigation: React.FC = () => {
   const navItems = [
     { to: "/", label: "대시보드", icon: LayoutDashboard },
     { to: "/production", label: "생산 관리", icon: Factory },
-    { to: "/work-orders", label: "작업지시서", icon: ClipboardList },
     { to: "/issues", label: "이슈 관리", icon: AlertCircle },
   ];
 

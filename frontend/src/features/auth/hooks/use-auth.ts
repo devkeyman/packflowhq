@@ -5,6 +5,8 @@ import {
   LoginRequest,
   RefreshTokenRequest,
   LogoutRequest,
+  AuthResponse,
+  User,
 } from "@/entities/user";
 
 // 로그인 훅
@@ -22,10 +24,19 @@ export const useLogin = () => {
         setLoading(false);
       }
     },
-    onSuccess: (data) => {
+    onSuccess: (data: AuthResponse) => {
       // 사용자 정보와 토큰 저장
-      setUser(data.user);
-      setTokens(data.accessToken, data.refreshToken);
+      const user: User = {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        role: data.role,
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      setUser(user);
+      setTokens(data.token, data.refreshToken);
 
       // 관련 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: ["dashboard"] });
@@ -47,9 +58,9 @@ export const useRefreshToken = () => {
       const response = await authApi.refresh(refreshToken);
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: AuthResponse) => {
       // 새로운 토큰 저장
-      setTokens(data.accessToken, data.refreshToken);
+      setTokens(data.token, data.refreshToken);
     },
     onError: (error) => {
       console.error("Token refresh failed:", error);

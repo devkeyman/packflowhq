@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { useAuthStore } from "@/shared/stores";
 import { getApiBaseUrl } from "@/shared/config/api.config";
+import { AuthResponse } from "@/entities/user";
 
 // API 클라이언트 설정
 const API_BASE_URL = getApiBaseUrl();
@@ -42,15 +43,14 @@ apiClient.interceptors.response.use(
       try {
         const { refreshToken } = useAuthStore.getState();
         if (refreshToken) {
-          const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+          const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/refresh`, {
             refreshToken,
           });
 
-          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-            response.data;
-          useAuthStore.getState().setTokens(newAccessToken, newRefreshToken);
+          const { token, refreshToken: newRefreshToken } = response.data;
+          useAuthStore.getState().setTokens(token, newRefreshToken);
 
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${token}`;
           return apiClient(originalRequest);
         }
       } catch (refreshError) {
