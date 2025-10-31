@@ -2,8 +2,10 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./layout";
 import DashboardPage from "@/pages/dashboard";
-import ProductionPage from "@/pages/production";
-import IssuesPage from "@/pages/issues";
+import ProductionListPage from "@/pages/production/list";
+import ProductionCreatePage from "@/pages/production/create";
+import ProductionDetailPage from "@/pages/production/detail";
+import ProductionEditPage from "@/pages/production/edit";
 import { LoginPage } from "@/pages/auth/login";
 import { ProtectedRoute } from "@/features/auth/components/protected-route";
 
@@ -26,11 +28,24 @@ const router = createBrowserRouter([
       },
       {
         path: "production",
-        element: <ProductionPage />,
-      },
-      {
-        path: "issues",
-        element: <IssuesPage />,
+        children: [
+          {
+            index: true,
+            element: <ProductionListPage />,
+          },
+          {
+            path: "new",
+            element: <ProductionCreatePage />,
+          },
+          {
+            path: ":id",
+            element: <ProductionDetailPage />,
+          },
+          {
+            path: ":id/edit",
+            element: <ProductionEditPage />,
+          },
+        ],
       },
     ],
   },

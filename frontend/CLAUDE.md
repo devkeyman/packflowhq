@@ -34,10 +34,10 @@ app → pages → widgets → features → entities → shared
 ### Layer Responsibilities
 
 - **app/**: Application setup, routing, global providers
-- **pages/**: Page compositions using widgets (auth/login, dashboard, production, issues)
-- **widgets/**: Complex UI blocks combining features (navigation, dashboard widgets, work order forms/tables, issue management)
-- **features/**: Business logic and hooks (auth, dashboard, issues, production, real-time monitoring)
-- **entities/**: Domain models and types (user, production/WorkOrder, issues/Issue)
+- **pages/**: Page compositions (auth/login, dashboard, production)
+- **widgets/**: Complex UI blocks (navigation)
+- **features/**: Business logic and hooks (auth only - production features to be implemented)
+- **entities/**: Domain models and types (user, production - to be redesigned)
 - **shared/**: Reusable utilities (api clients, components, stores, config)
 
 ### Path Aliases
@@ -64,19 +64,31 @@ All imports use `@/` prefix for absolute paths:
 - **Client**: Axios instance with interceptors in `src/shared/api/client.ts`
 - **Error Handling**: Automatic 401 handling with token refresh
 
-### Entity Status Enums
+### Current Pages and Routes
 
-**WorkOrder**:
-- Status: `PENDING`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
-- Priority: `LOW`, `NORMAL`, `MEDIUM`, `HIGH`, `URGENT`
+**Dashboard** (`/`)
+- Empty template with header only
+- To be implemented based on requirements
 
-**Issue**:
-- Status: `OPEN`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`
-- Priority: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`
-- Type: `EQUIPMENT`, `QUALITY`, `SAFETY`, `PROCESS`, `OTHER`
+**Production Management** (`/production/*`)
+- `/production` - List page (작업 지시서 목록)
+- `/production/new` - Create page (새 작업 지시서 등록)
+- `/production/:id` - Detail page (작업 지시서 상세)
+- `/production/:id/edit` - Edit page (작업 지시서 수정)
+- All pages have header only, main content to be implemented
 
-**User**:
+**Authentication**
+- `/login` - Login page (fully functional)
+
+### Entity Types
+
+**User** (defined in `entities/user/types.ts`):
 - Roles: `ADMIN`, `MANAGER`, `WORKER`
+- Includes auth-related types: `LoginRequest`, `AuthResponse`, `LoginResponse`
+
+**Production** (to be redesigned):
+- Currently empty placeholder in `entities/production/index.ts`
+- WorkOrder types and related entities need to be defined
 
 ## Component Patterns
 
@@ -118,12 +130,33 @@ export const entityApi = {
 };
 ```
 
+## Current Project State
+
+### What's Implemented
+- ✅ Authentication flow (login, logout, token refresh)
+- ✅ Protected routes with role-based access
+- ✅ Navigation sidebar
+- ✅ Page routing structure for production management
+- ✅ Empty page templates (Dashboard, Production pages)
+
+### What's NOT Implemented (To Do)
+- ❌ Production entity types and API
+- ❌ Production list, create, edit, detail functionality
+- ❌ Dashboard content and widgets
+- ❌ All business logic for production management
+
+### Available APIs
+- `authApi` - Authentication (login, logout, refresh)
+- `usersApi` - User management
+- Production APIs need to be created
+
 ## Development Workflow
 
 1. **Feature Development**: Start in `features/` with hooks, move up to `widgets/` for UI, integrate in `pages/`
 2. **New Entity**: Define types in `entities/`, create API in `shared/api/`, add hooks in `features/`
 3. **Component Creation**: Check existing patterns in same layer, maintain consistency
 4. **Import Organization**: Use barrel exports (`index.ts`) in each module
+5. **Routing**: Use React Router for page navigation (no ViewMode state management)
 
 ## Code Style Guidelines
 

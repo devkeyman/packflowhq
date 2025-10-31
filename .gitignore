@@ -44,3 +44,4 @@ logs/
 *.jks
 *.keystore
 *.truststore
+**/.claude/settings.local.json

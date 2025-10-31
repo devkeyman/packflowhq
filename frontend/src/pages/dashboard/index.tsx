@@ -1,9 +1,4 @@
 import React from "react";
-import {
-  StatsCards,
-  ProductionStatus,
-  RecentActivities,
-} from "@/widgets/dashboard";
 
 const DashboardPage: React.FC = () => {
   return (
@@ -15,9 +10,9 @@ const DashboardPage: React.FC = () => {
             <p className="mt-1 text-sm text-gray-500">스마트 팩토리 MES 시스템 현황을 한눈에 확인하세요</p>
           </div>
           <div className="text-sm text-gray-500">
-            {new Date().toLocaleDateString('ko-KR', { 
-              year: 'numeric', 
-              month: 'long', 
+            {new Date().toLocaleDateString('ko-KR', {
+              year: 'numeric',
+              month: 'long',
               day: 'numeric',
               weekday: 'long'
             })}
@@ -26,12 +21,7 @@ const DashboardPage: React.FC = () => {
       </header>
 
       <main className="space-y-8">
-        <StatsCards />
-        
-        <div className="grid gap-8 lg:grid-cols-2">
-          <ProductionStatus />
-          <RecentActivities />
-        </div>
+        {/* Main content here */}
       </main>
     </div>
   );

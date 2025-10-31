@@ -1,1 +1,1 @@
-export * from "./types";
+// Production entity types will be defined here

@@ -35,6 +35,7 @@ npm install && npm run dev
 ## 🚀 기술 스택
 
 ### Backend
+
 - **Framework**: Spring Boot 3.5.4
 - **Language**: Java 17
 - **Database**: MySQL 8.0
@@ -44,6 +45,7 @@ npm install && npm run dev
 - **Architecture**: Hexagonal Architecture (Port & Adapter Pattern)
 
 ### Frontend
+
 - **Framework**: React 19.1.1 + TypeScript 5.9.2
 - **Build Tool**: Vite 7.1.0
 - **Routing**: React Router DOM 7.8.0
@@ -186,7 +188,6 @@ npm run dev
   - `/api/*` → Spring Boot API 엔드포인트
 - **확장성**: 각 컴포넌트가 독립적으로 스케일링 가능
 
-
 ## 📦 Ubuntu EC2 배포 (상세 가이드)
 
 ### 사전 준비
@@ -197,7 +198,7 @@ npm run dev
 - **OS**: Ubuntu 22.04 LTS
 - **IP 주소**: 13.209.192.235
 - **키페어**: innopackage-smart-factory-mes.pem
-- **도메인**: 
+- **도메인**:
   - 메인: www.innopackage.com
   - 개발: d.innopackage.com
   - 스테이징: s.innopackage.com
@@ -354,17 +355,17 @@ ssh -i $PEM_FILE $EC2_USER@$EC2_HOST << EOF
   sudo rm -rf /var/www/mes/frontend/*
   sudo cp -r /tmp/frontend/* /var/www/mes/frontend/
   sudo chown -R www-data:www-data /var/www/mes/frontend
-  
+
   # Backend 배포
   mv /tmp/$JAR_NAME /opt/mes/backend/
-  
+
   # 서비스 재시작
   sudo systemctl restart mes
   sudo systemctl restart nginx
-  
+
   # 임시 파일 정리
   rm -rf /tmp/frontend
-  
+
   echo "Deployment completed!"
 EOF
 
@@ -384,8 +385,8 @@ After=syslog.target mysql.service
 
 [Service]
 User=ubuntu
-WorkingDirectory=/opt/mes/backend
-ExecStart=/usr/bin/java -jar -Dspring.profiles.active=prod /opt/mes/backend/mes-inno-0.0.1-SNAPSHOT.jar
+WorkingDirectory=/opt/mes
+ExecStart=/usr/bin/java -jar -Dspring.profiles.active=dev /opt/mes/mes-inno-0.0.1-SNAPSHOT.jar
 SuccessExitStatus=143
 StandardOutput=journal
 StandardError=journal
@@ -413,7 +414,7 @@ server {
     server_name www.innopackage.com d.innopackage.com s.innopackage.com;
 
     client_max_body_size 10M;
-    
+
     # Frontend 정적 파일 서빙
     root /var/www/mes/frontend;
     index index.html;
@@ -422,7 +423,7 @@ server {
     location / {
         try_files \$uri \$uri/ /index.html;
     }
-    
+
     # Backend API 프록시
     location /api {
         proxy_pass http://localhost:8080;
@@ -430,7 +431,7 @@ server {
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
-        
+
         # WebSocket 지원 (필요시)
         proxy_http_version 1.1;
         proxy_set_header Upgrade \$http_upgrade;
@@ -481,8 +482,6 @@ sudo journalctl -u mes -n 50
 sudo tail -f /var/log/nginx/error.log
 ```
 
-
-
 ## 📊 운영 및 모니터링
 
 ### 실시간 모니터링
@@ -529,7 +528,6 @@ mysqldump -u mes_user -p mes_db > backup_$(date +%Y%m%d).sql
 # 자동 백업 스크립트 (crontab에 추가)
 0 2 * * * mysqldump -u mes_user -p'password' mes_db > /backup/mes_db_$(date +\%Y\%m\%d).sql
 ```
-
 
 ## 🔧 트러블슈팅 가이드
 
@@ -599,13 +597,14 @@ chmod 755 backend/scripts/*.sh
 
 ## 👤 사용자 권한
 
-| 역할 | 권한 |
-|------|------|
-| **ADMIN** | 시스템 전체 관리, 사용자 관리, 모든 데이터 접근 |
-| **MANAGER** | 작업 지시서 관리, 이슈 할당, 보고서 조회 |
-| **WORKER** | 할당된 작업 수행, 이슈 보고, 작업 로그 작성 |
+| 역할        | 권한                                            |
+| ----------- | ----------------------------------------------- |
+| **ADMIN**   | 시스템 전체 관리, 사용자 관리, 모든 데이터 접근 |
+| **MANAGER** | 작업 지시서 관리, 이슈 할당, 보고서 조회        |
+| **WORKER**  | 할당된 작업 수행, 이슈 보고, 작업 로그 작성     |
 
 ### 테스트 계정
+
 - Admin: `admin@mes.com` / `admin123`
 - Manager: `manager@mes.com` / `manager123`
 - Worker: `worker@mes.com` / `worker123`
@@ -613,6 +612,7 @@ chmod 755 backend/scripts/*.sh
 ## 📝 API 문서
 
 주요 API 엔드포인트:
+
 - `/api/auth/*` - 인증 관련
 - `/api/users/*` - 사용자 관리
 - `/api/work-orders/*` - 작업 지시서 관리
@@ -629,6 +629,7 @@ chmod 755 backend/scripts/*.sh
 5. Open a Pull Request
 
 ### 커밋 메시지 규칙
+
 ```
 feat: 새로운 기능 추가
 fix: 버그 수정
@@ -642,16 +643,19 @@ chore: 빌드 업무 수정
 ## 🚀 성능 최적화 팁
 
 ### Backend 최적화
+
 - JVM 힙 메모리 조정: `-Xmx1g -Xms512m`
 - 데이터베이스 커넥션 풀 설정: `spring.datasource.hikari.maximum-pool-size=20`
 - 캐싱 활성화: Spring Cache 또는 Redis 사용
 
 ### Frontend 최적화
+
 - 프로덕션 빌드: `npm run build`
 - Gzip 압축 활성화 (Nginx)
 - 이미지 최적화 및 Lazy Loading
 
 ### 데이터베이스 최적화
+
 - 인덱스 생성: 자주 조회되는 컬럼
 - 쿼리 최적화: EXPLAIN 분석
 - 정기적인 백업 및 정리

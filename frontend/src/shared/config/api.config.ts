@@ -1,30 +1,30 @@
-type Environment = "production" | "staging" | "development" | "local";
+type Environment = "prod" | "stg" | "dev" | "local";
 
 const getEnvironment = (): Environment => {
   const hostname = window.location.hostname;
 
   if (hostname === "localhost" || hostname === "127.0.0.1") {
     return "local";
-    // return "development";
+    // return "dev";
   } else if (
     hostname === "www.innopackage.com" ||
     hostname === "innopackage.com"
   ) {
-    return "production";
+    return "prod";
   } else if (hostname === "s.innopackage.com") {
-    return "staging";
+    return "stg";
   } else if (hostname === "d.innopackage.com") {
-    return "development";
+    return "dev";
   }
 
   // 기본값
-  return "development";
+  return "dev";
 };
 
 const ROOT_URLS: Record<Environment, string> = {
-  production: "https://www.innopackage.com",
-  staging: "https://s.innopackage.com",
-  development: "http://d.innopackage.com",
+  prod: "http://www.innopackage.com",
+  stg: "http://s.innopackage.com",
+  dev: "http://d.innopackage.com",
   local: "http://localhost:8080",
 };
 
