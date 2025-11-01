@@ -8,7 +8,9 @@
       "mcp__ide__getDiagnostics",
       "Bash(chmod:*)",
       "Bash(./test-cors.sh:*)",
-      "Bash(ssh:*)"
+      "Bash(ssh:*)",
+      "Read(//Users/gimmunjong/Documents/programming/mes-inno/**)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

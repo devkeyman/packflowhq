@@ -64,13 +64,7 @@ public class WorkOrder {
     
     @Column(columnDefinition = "TEXT")
     private String notes;
-    
-    @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkLog> workLogs = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "workOrder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Issue> issues = new ArrayList<>();
-    
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
@@ -126,16 +120,10 @@ public class WorkOrder {
     
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
-    
-    public List<WorkLog> getWorkLogs() { return workLogs; }
-    public void setWorkLogs(List<WorkLog> workLogs) { this.workLogs = workLogs; }
-    
-    public List<Issue> getIssues() { return issues; }
-    public void setIssues(List<Issue> issues) { this.issues = issues; }
-    
+
     public Integer getActualQuantity() { return actualQuantity; }
     public void setActualQuantity(Integer actualQuantity) { this.actualQuantity = actualQuantity; }
-    
+
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
 }

@@ -37,12 +37,6 @@ public class User {
     @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL)
     private List<WorkOrder> workOrders = new ArrayList<>();
     
-    @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
-    private List<WorkLog> workLogs = new ArrayList<>();
-    
-    @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
-    private List<Issue> reportedIssues = new ArrayList<>();
-    
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
@@ -82,10 +76,4 @@ public class User {
     
     public List<WorkOrder> getWorkOrders() { return workOrders; }
     public void setWorkOrders(List<WorkOrder> workOrders) { this.workOrders = workOrders; }
-    
-    public List<WorkLog> getWorkLogs() { return workLogs; }
-    public void setWorkLogs(List<WorkLog> workLogs) { this.workLogs = workLogs; }
-    
-    public List<Issue> getReportedIssues() { return reportedIssues; }
-    public void setReportedIssues(List<Issue> reportedIssues) { this.reportedIssues = reportedIssues; }
 }

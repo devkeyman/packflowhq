@@ -18,7 +18,7 @@ public class CreateWorkOrderDto {
     private Integer quantity;
     
     @NotNull(message = "Due date is required")
-    @Future(message = "Due date must be in the future")
+    @FutureOrPresent(message = "Due date must be today or in the future")
     private LocalDateTime dueDate;
     
     private String priority = "MEDIUM";

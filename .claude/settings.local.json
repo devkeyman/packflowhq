@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(chmod:*)",
-      "Read(//Users/gimmunjong/Documents/programming/**)"
+      "Read(//Users/gimmunjong/Documents/programming/**)",
+      "Bash(./mvnw spring-boot:run:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []
