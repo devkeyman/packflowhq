@@ -2,6 +2,8 @@ package com.mes.adapter.in.web.controller;
 
 import com.mes.adapter.in.web.dto.workorder.request.CreateWorkOrderRequest;
 import com.mes.adapter.in.web.dto.workorder.request.UpdateWorkOrderRequest;
+import com.mes.adapter.in.web.dto.workorder.response.BulkCreateResponse;
+import com.mes.adapter.in.web.dto.workorder.response.BulkCreateResponse.BulkCreateResultItem;
 import com.mes.adapter.in.web.dto.workorder.response.CreateWorkOrderResponse;
 import com.mes.adapter.in.web.dto.workorder.response.UpdateWorkOrderResponse;
 import com.mes.adapter.in.web.dto.workorder.response.WorkOrderDetailResponse;
@@ -13,12 +15,17 @@ import com.mes.common.exception.EntityNotFoundException;
 import com.mes.common.exception.ErrorCode;
 import com.mes.common.response.ApiResponse;
 import com.mes.domain.model.WorkOrderModel;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/work-orders")
@@ -26,9 +33,11 @@ import java.util.List;
 public class WorkOrderController {
 
     private final WorkOrderUseCase workOrderUseCase;
+    private final Validator validator;
 
-    public WorkOrderController(WorkOrderUseCase workOrderUseCase) {
+    public WorkOrderController(WorkOrderUseCase workOrderUseCase, Validator validator) {
         this.workOrderUseCase = workOrderUseCase;
+        this.validator = validator;
     }
 
     /**
@@ -46,6 +55,52 @@ public class WorkOrderController {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(ApiResponse.success(response));
+    }
+
+    /**
+     * 작업지시서 일괄 등록
+     * POST /api/work-orders/bulk
+     */
+    @PostMapping("/bulk")
+    public ResponseEntity<ApiResponse<BulkCreateResponse>> bulkCreateWorkOrders(
+            @RequestBody List<CreateWorkOrderRequest> requests) {
+
+        List<BulkCreateResultItem> results = new ArrayList<>();
+        int successCount = 0;
+        int failureCount = 0;
+
+        for (int i = 0; i < requests.size(); i++) {
+            int row = i + 1;
+            CreateWorkOrderRequest request = requests.get(i);
+
+            // 수동 검증
+            Set<ConstraintViolation<CreateWorkOrderRequest>> violations = validator.validate(request);
+            if (!violations.isEmpty()) {
+                String errorMsg = violations.stream()
+                        .map(ConstraintViolation::getMessage)
+                        .collect(Collectors.joining(", "));
+                results.add(BulkCreateResultItem.failure(row, errorMsg));
+                failureCount++;
+                continue;
+            }
+
+            try {
+                CreateWorkOrderCommand command = toCommand(request);
+                WorkOrderModel created = workOrderUseCase.createWorkOrder(command);
+                results.add(BulkCreateResultItem.success(row, created.getWorkOrderNo()));
+                successCount++;
+            } catch (Exception e) {
+                results.add(BulkCreateResultItem.failure(row, e.getMessage()));
+                failureCount++;
+            }
+        }
+
+        BulkCreateResponse response = new BulkCreateResponse(
+                requests.size(), successCount, failureCount, results);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(response));
     }
 
     /**

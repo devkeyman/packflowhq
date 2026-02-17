@@ -4,6 +4,7 @@ import type {
   WorkOrderListItem,
   CreateWorkOrderRequest,
   CreateWorkOrderResponse,
+  BulkCreateResponse,
   ApiResponse,
 } from "@/entities/work-order";
 
@@ -24,6 +25,17 @@ export const workOrdersApi = {
       `${WORK_ORDERS_ENDPOINT}/${id}`
     );
     return response.data.data;
+  },
+
+  // 작업지시서 일괄 등록
+  bulkCreate: async (
+    data: CreateWorkOrderRequest[]
+  ): Promise<ApiResponse<BulkCreateResponse>> => {
+    const response = await apiClient.post<ApiResponse<BulkCreateResponse>>(
+      `${WORK_ORDERS_ENDPOINT}/bulk`,
+      data
+    );
+    return response.data;
   },
 
   // 작업지시서 생성

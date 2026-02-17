@@ -1,12 +1,8 @@
-# Innopackage - Smart Factory MES (Manufacturing Execution System)
+# Innopackage - Smart Factory MES
 
-이노패키지 스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관리, 작업 지시, 품질 이슈 추적을 위한 통합 플랫폼
+이노패키지 스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관리 및 작업 지시 추적을 위한 웹 기반 플랫폼
 
-## 📋 프로젝트 개요
-
-Innopackage - Smart Factory MES는 제조 현장의 생산 활동을 실시간으로 모니터링하고 관리하는 웹 기반 시스템입니다. 작업 지시서 관리, 생산 진행 상황 추적, 품질 이슈 관리 등의 기능을 제공하여 제조 현장의 효율성을 극대화합니다.
-
-### 🎯 Quick Start (빠른 시작)
+## Quick Start
 
 ```bash
 # 1. 프로젝트 클론
@@ -24,15 +20,21 @@ npm install && npm run dev
 # 4. 브라우저에서 http://localhost:5173 접속
 ```
 
-### 주요 기능
+### 테스트 계정
 
-- **사용자 인증 및 권한 관리**: JWT 기반 인증, 역할별 접근 제어 (관리자/매니저/작업자)
-- **작업 지시서 관리**: 작업 생성, 할당, 진행 상황 추적, 완료 처리
-- **생산 모니터링**: 실시간 생산 현황 대시보드, 생산 통계 및 리포트
-- **품질 이슈 관리**: 이슈 보고, 추적, 해결 프로세스 관리
-- **작업 로그**: 모든 작업 활동 기록 및 추적
+| 역할 | 이메일 | 비밀번호 |
+|------|--------|----------|
+| Admin | admin@mes.com | admin123 |
+| Manager | manager@mes.com | manager123 |
+| Worker | worker@mes.com | worker123 |
 
-## 🚀 기술 스택
+## 주요 기능
+
+- **사용자 인증 및 권한 관리**: JWT 기반 인증, 역할별 접근 제어 (ADMIN / MANAGER / WORKER)
+- **작업 지시서 관리**: 작업 생성, 할당, 상태 전이(대기/진행/일시정지/완료/취소), 진행률 추적
+- **생산 모니터링 대시보드**: 상태별/우선순위별 통계, 마감 임박 알림
+
+## 기술 스택
 
 ### Backend
 
@@ -42,593 +44,180 @@ npm install && npm run dev
 - **Security**: Spring Security + JWT
 - **ORM**: Spring Data JPA / Hibernate
 - **Build Tool**: Maven
-- **Architecture**: Hexagonal Architecture (Port & Adapter Pattern)
+- **Architecture**: Hexagonal Architecture (Port & Adapter)
 
 ### Frontend
 
-- **Framework**: React 19.1.1 + TypeScript 5.9.2
-- **Build Tool**: Vite 7.1.0
-- **Routing**: React Router DOM 7.8.0
-- **State Management**: Zustand 5.0.7 + TanStack React Query 5.84.2
-- **HTTP Client**: Axios 1.11.0
-- **UI Components**: Tailwind CSS + shadcn/ui
-- **Icons**: Lucide React
+- **Framework**: React 19 + TypeScript 5
+- **Build Tool**: Vite
+- **Routing**: React Router DOM
+- **State Management**: Zustand + TanStack React Query
+- **HTTP Client**: Axios
+- **UI**: Tailwind CSS + shadcn/ui
 - **Architecture**: Feature-Sliced Design (FSD)
 
-## 📁 프로젝트 구조
+## 프로젝트 구조
 
 ```
 mes-inno/
 ├── backend/                    # Spring Boot 백엔드
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/mes/
-│   │   │   │   ├── adapter/       # 어댑터 레이어 (Web, Persistence)
-│   │   │   │   ├── application/   # 애플리케이션 레이어 (UseCase, Service)
-│   │   │   │   ├── domain/        # 도메인 레이어 (Model, Service)
-│   │   │   │   ├── config/        # 설정 클래스
-│   │   │   │   └── common/        # 공통 컴포넌트 (DTO, Exception, Mapper)
-│   │   │   └── resources/
-│   │   │       ├── application*.yml
-│   │   │       └── static/        # 빌드된 프론트엔드 파일
-│   │   └── test/
-│   ├── scripts/                # 배포 스크립트
-│   └── pom.xml
+│   └── src/main/java/com/mes/
+│       ├── adapter/            # 어댑터 (Web Controller, Persistence)
+│       ├── application/        # 유스케이스, 서비스
+│       ├── domain/             # 도메인 모델
+│       ├── config/             # 설정 클래스
+│       └── common/             # DTO, 예외, 매퍼
 │
 ├── frontend/                   # React 프론트엔드
-│   ├── src/
-│   │   ├── app/               # 앱 설정 (라우터, 레이아웃)
-│   │   ├── entities/          # 비즈니스 엔티티
-│   │   ├── features/          # 기능 모듈
-│   │   ├── pages/             # 페이지 컴포넌트
-│   │   ├── shared/            # 공유 컴포넌트 및 유틸리티
-│   │   └── widgets/           # UI 위젯
-│   ├── package.json
-│   └── vite.config.ts
+│   └── src/
+│       ├── app/                # 라우터, 레이아웃
+│       ├── pages/              # 페이지 컴포넌트
+│       ├── widgets/            # 복합 UI 블록
+│       ├── features/           # 비즈니스 로직, 훅
+│       ├── entities/           # 도메인 모델, 타입
+│       └── shared/             # API 클라이언트, 공통 컴포넌트
 │
+├── docs/                       # 설계 문서
 └── scripts/                    # 유틸리티 스크립트
 ```
 
-## 🛠️ 로컬 개발 환경 설정
+## 로컬 개발 환경 설정
 
 ### 사전 요구사항
 
-- **Java 17** 이상 ([다운로드](https://adoptium.net/))
-- **Node.js 18** 이상 ([다운로드](https://nodejs.org/))
-- **MySQL 8.0** 이상 ([다운로드](https://dev.mysql.com/downloads/))
-- **Maven 3.6** 이상 ([다운로드](https://maven.apache.org/download.cgi))
-- **Git** ([다운로드](https://git-scm.com/downloads))
+- Java 17+
+- Node.js 18+
+- MySQL 8.0+
 
-### 1. 프로젝트 클론
+### 데이터베이스 설정
 
-```bash
-# 저장소 클론
-git clone https://github.com/devkeyman/mes-inno.git
-cd mes-inno
-```
-
-### 2. 데이터베이스 설정
-
-```bash
-# MySQL 데이터베이스 생성
-mysql -u root -p
-
+```sql
 CREATE DATABASE mes_db_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'inno0000';
 GRANT ALL PRIVILEGES ON mes_db_dev.* TO 'admin'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-### 3. Backend 설정 및 실행
+### Backend 실행
 
 ```bash
 cd backend
-
-# application-dev.yml 생성 (개발 환경 설정)
-cp src/main/resources/application.yml src/main/resources/application-dev.yml
-
-# application-dev.yml 파일을 열어 데이터베이스 정보 수정
-# spring.datasource.username과 password를 위에서 생성한 계정으로 변경
-
-# Maven Wrapper 생성 (처음 한 번만)
-mvn wrapper:wrapper
-chmod +x mvnw
-
-# 의존성 설치 및 빌드
-./mvnw clean install
-
-# 애플리케이션 실행 (개발 모드)
-./mvnw spring-boot:run -Dspring.profiles.active=dev
+./mvnw spring-boot:run
 ```
 
-✅ 백엔드 서버가 http://localhost:8080 에서 실행됩니다.
+백엔드: http://localhost:8080
 
-### 4. Frontend 설정 및 실행
+### Frontend 실행
 
 ```bash
-# 새 터미널을 열고 프로젝트 루트에서
 cd frontend
-
-# 환경 변수 파일 생성
-echo "VITE_API_URL=http://localhost:8080" > .env.development
-
-# 의존성 설치
 npm install
-
-# 개발 서버 실행
 npm run dev
 ```
 
-✅ 프론트엔드가 http://localhost:5173 에서 실행됩니다.
+프론트엔드: http://localhost:5173
 
-### 5. 개발 환경 확인
+### 빌드
 
-1. **Frontend 접속**: http://localhost:5173
-2. **Backend API 확인**: http://localhost:8080/actuator/health
-3. **테스트 로그인**:
-   - Admin: `admin@mes.com` / `admin123`
-   - Manager: `manager@mes.com` / `manager123`
-   - Worker: `worker@mes.com` / `worker123`
+```bash
+# Backend
+cd backend && ./mvnw clean package -DskipTests
 
-## 🚢 프로덕션 배포 가이드
+# Frontend
+cd frontend && npm run build
+
+# 전체 빌드 (Frontend -> Backend static)
+./scripts/build.sh
+```
+
+## API 엔드포인트
+
+Base URL: `http://localhost:8080/api`
+
+| 엔드포인트 | 설명 |
+|------------|------|
+| `/api/auth/*` | 인증 (로그인, 토큰 갱신, 로그아웃) |
+| `/api/users/*` | 사용자 관리 |
+| `/api/work-orders/*` | 작업 지시서 CRUD 및 상태 관리 |
+| `/api/dashboard/*` | 대시보드 통계 |
+
+## 사용자 역할
+
+| 역할 | 권한 |
+|------|------|
+| **ADMIN** | 시스템 전체 관리, 사용자 관리, 모든 데이터 접근 |
+| **MANAGER** | 작업 지시서 관리, 보고서 조회 |
+| **WORKER** | 할당된 작업 수행, 작업 상태 변경 |
+
+## 배포
 
 ### 배포 아키텍처
 
-본 프로젝트는 프론트엔드와 백엔드를 완전히 분리하여 배포합니다:
-
-- **프론트엔드 (React)**: Nginx를 통해 정적 파일로 서빙
-- **백엔드 (Spring Boot)**: JAR 파일로 독립 실행
-- **도메인 구조**:
-  - `www.innopackage.com` → 메인 서비스
-  - `d.innopackage.com` → 개발 환경
-  - `s.innopackage.com` → 스테이징 환경
-- **라우팅 구조**:
-  - `/` → React 앱 (Nginx가 정적 파일 서빙)
-  - `/login`, `/dashboard` 등 → React Router가 클라이언트 사이드 라우팅 처리
-  - `/api/*` → Spring Boot API 엔드포인트
-- **확장성**: 각 컴포넌트가 독립적으로 스케일링 가능
-
-## 📦 Ubuntu EC2 배포 (상세 가이드)
-
-### 사전 준비
-
-#### 1. AWS 계정 및 EC2 인스턴스 정보
-
-- **인스턴스 타입**: t3.small
-- **OS**: Ubuntu 22.04 LTS
-- **IP 주소**: 13.209.192.235
-- **키페어**: innopackage-smart-factory-mes.pem
+- **프론트엔드**: Nginx 정적 파일 서빙
+- **백엔드**: JAR 독립 실행 (Systemd 서비스)
 - **도메인**:
-  - 메인: www.innopackage.com
-  - 개발: d.innopackage.com
-  - 스테이징: s.innopackage.com
-- **보안 그룹 인바운드 규칙**:
-  - SSH (22): 관리자 IP
-  - HTTP (80): 0.0.0.0/0
-  - HTTPS (443): 0.0.0.0/0
-  - Spring Boot (8080): VPC 내부만
+  - `www.innopackage.com` - 메인 서비스
+  - `d.innopackage.com` - 개발 환경
 
-### 배포 단계별 가이드
-
-#### Step 1: EC2 인스턴스 접속
+### EC2 배포 (Ubuntu)
 
 ```bash
-# PEM 파일 권한 설정
-chmod 400 innopackage-smart-factory-mes.pem
+# 전체 배포 (Backend + Frontend)
+./deploy-all.sh
 
-# SSH 접속
-ssh -i innopackage-smart-factory-mes.pem ubuntu@13.209.192.235
-
-# 접속 확인
-whoami  # ubuntu가 출력되어야 함
+# 또는 개별 배포
+./deploy-backend.sh
+./deploy-frontend.sh
 ```
 
-#### Step 2: 필수 소프트웨어 설치
+**Backend 배포 흐름** (`deploy-backend.sh`):
+
+1. `./mvnw clean package -DskipTests` — JAR 빌드
+2. `scp` — JAR를 EC2 `/tmp/`로 전송
+3. `ssh` — 서비스 중지 → 기존 JAR 백업 → 새 JAR 이동 → 서비스 시작
+4. 헬스체크 (`/api/actuator/health`)
+
+**Frontend 배포 흐름** (`deploy-frontend.sh`):
+
+1. `npm run build` — 정적 파일 빌드
+2. `rsync` — `dist/`를 EC2 `/var/www/mes/frontend/`로 동기화
+3. `ssh` — 권한 설정 → Nginx reload
+
+**서버 정보**:
+
+| 항목 | 값 |
+|------|-----|
+| 호스트 | `ubuntu@13.209.192.235` |
+| PEM | `innopackage-smart-factory-mes.pem` (프로젝트 루트) |
+| Backend 경로 | `/opt/mes/` |
+| Frontend 경로 | `/var/www/mes/frontend/` |
+
+### 서버 구성
+
+| 항목 | 값 |
+|------|-----|
+| 인스턴스 | t3.small (Ubuntu 22.04) |
+| Java | OpenJDK 17 |
+| DB | MySQL 8.0 |
+| 리버스 프록시 | Nginx |
+| SSL | Let's Encrypt (Certbot) |
+
+### 서비스 관리
 
 ```bash
-# 시스템 업데이트
-sudo apt update && sudo apt upgrade -y
+# 서비스 상태 확인
+sudo systemctl status mes
+sudo systemctl status nginx
 
-# Java 17 설치
-sudo apt install -y openjdk-17-jdk
+# 로그 확인
+sudo journalctl -u mes -f
 
-# Node.js 18 설치
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# MySQL 8.0 설치
-sudo apt install -y mysql-server
-
-# Nginx 설치
-sudo apt install -y nginx
-
-# Git 설치
-sudo apt install -y git
-
-# 설치 확인
-java -version
-node -v
-mysql --version
-nginx -v
-```
-
-#### Step 3: MySQL 데이터베이스 설정
-
-```bash
-# MySQL 보안 설정
-sudo mysql_secure_installation
-
-# MySQL 접속
-sudo mysql -u root -p
-
-# 데이터베이스 및 사용자 생성
-CREATE DATABASE mes_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'mes_user'@'localhost' IDENTIFIED BY 'your_secure_password';
-GRANT ALL PRIVILEGES ON mes_db.* TO 'mes_user'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-```
-
-#### Step 4: 프로젝트 빌드 및 배포
-
-##### SCP를 이용한 배포
-
-**로컬 환경에서 빌드:**
-
-```bash
-# 로컬 머신에서 프로젝트 클론
-git clone https://github.com/devkeyman/mes-inno.git
-cd mes-inno
-
-# Frontend 빌드
-cd frontend
-npm install
-npm run build
-
-# Backend JAR 파일 빌드
-cd ../backend
-./mvnw clean package -DskipTests
-
-# 빌드된 파일을 EC2로 업로드
-# Frontend 정적 파일 업로드
-scp -i innopackage-smart-factory-mes.pem -r ../frontend/dist/* ubuntu@13.209.192.235:/tmp/frontend/
-
-# Backend JAR 파일 업로드
-scp -i innopackage-smart-factory-mes.pem target/mes-inno-0.0.1-SNAPSHOT.jar ubuntu@13.209.192.235:/tmp/
-
-# application-prod.yml 파일 업로드 (필요시)
-scp -i innopackage-smart-factory-mes.pem src/main/resources/application-prod.yml ubuntu@13.209.192.235:/tmp/
-```
-
-**EC2 서버에서 배포:**
-
-```bash
-# EC2에 접속
-ssh -i innopackage-smart-factory-mes.pem ubuntu@13.209.192.235
-
-# Frontend 파일 배포
-sudo rm -rf /var/www/mes/frontend/*
-sudo cp -r /tmp/frontend/* /var/www/mes/frontend/
-sudo chown -R www-data:www-data /var/www/mes/frontend
-
-# Backend JAR 파일 배포
-mv /tmp/mes-inno-0.0.1-SNAPSHOT.jar /opt/mes/backend/
-mv /tmp/application-prod.yml /opt/mes/backend/ # 필요시
-
-# 서비스 재시작
+# 재시작
 sudo systemctl restart mes
 sudo systemctl restart nginx
 ```
 
-##### 배포 스크립트 자동화 (deploy.sh)
-
-```bash
-#!/bin/bash
-# 로컬에서 실행하는 배포 스크립트
-
-# 설정
-EC2_HOST="13.209.192.235"
-EC2_USER="ubuntu"
-PEM_FILE="innopackage-smart-factory-mes.pem"
-JAR_NAME="mes-inno-0.0.1-SNAPSHOT.jar"
-
-# 빌드
-echo "Building Frontend..."
-cd frontend && npm install && npm run build
-
-echo "Building Backend..."
-cd ../backend
-./mvnw clean package -DskipTests
-
-# Frontend 배포
-echo "Deploying Frontend to EC2..."
-ssh -i $PEM_FILE $EC2_USER@$EC2_HOST "sudo mkdir -p /tmp/frontend && sudo chown ubuntu:ubuntu /tmp/frontend"
-scp -i $PEM_FILE -r ../frontend/dist/* $EC2_USER@$EC2_HOST:/tmp/frontend/
-
-# Backend 배포
-echo "Deploying Backend to EC2..."
-scp -i $PEM_FILE target/$JAR_NAME $EC2_USER@$EC2_HOST:/tmp/
-
-# EC2에서 배포 실행
-ssh -i $PEM_FILE $EC2_USER@$EC2_HOST << EOF
-  # Frontend 배포
-  sudo rm -rf /var/www/mes/frontend/*
-  sudo cp -r /tmp/frontend/* /var/www/mes/frontend/
-  sudo chown -R www-data:www-data /var/www/mes/frontend
-
-  # Backend 배포
-  mv /tmp/$JAR_NAME /opt/mes/backend/
-
-  # 서비스 재시작
-  sudo systemctl restart mes
-  sudo systemctl restart nginx
-
-  # 임시 파일 정리
-  rm -rf /tmp/frontend
-
-  echo "Deployment completed!"
-EOF
-
-echo "Checking application health..."
-sleep 10
-curl -f http://$EC2_HOST/api/actuator/health && echo "Application is running!"
-```
-
-#### Step 5: Systemd 서비스 등록
-
-```bash
-# 서비스 파일 생성
-sudo tee /etc/systemd/system/mes.service << EOF
-[Unit]
-Description=Innopackage - Smart Factory MES
-After=syslog.target mysql.service
-
-[Service]
-User=ubuntu
-WorkingDirectory=/opt/mes
-ExecStart=/usr/bin/java -jar -Dspring.profiles.active=dev /opt/mes/mes-inno-0.0.1-SNAPSHOT.jar
-SuccessExitStatus=143
-StandardOutput=journal
-StandardError=journal
-Restart=on-failure
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# 서비스 시작
-sudo systemctl daemon-reload
-sudo systemctl enable mes
-sudo systemctl start mes
-sudo systemctl status mes
-```
-
-#### Step 6: Nginx 설정
-
-```bash
-# Nginx 설정 파일 생성
-sudo tee /etc/nginx/sites-available/mes << EOF
-server {
-    listen 80;
-    server_name www.innopackage.com d.innopackage.com s.innopackage.com;
-
-    client_max_body_size 10M;
-
-    # Frontend 정적 파일 서빙
-    root /var/www/mes/frontend;
-    index index.html;
-
-    # Frontend 라우팅 (React Router)
-    location / {
-        try_files \$uri \$uri/ /index.html;
-    }
-
-    # Backend API 프록시
-    location /api {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-
-        # WebSocket 지원 (필요시)
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-    }
-}
-EOF
-
-# 사이트 활성화
-sudo ln -s /etc/nginx/sites-available/mes /etc/nginx/sites-enabled/
-sudo rm /etc/nginx/sites-enabled/default
-sudo nginx -t
-sudo systemctl restart nginx
-```
-
-#### Step 7: SSL 인증서 설정 (HTTPS)
-
-```bash
-# Certbot 설치
-sudo apt install -y certbot python3-certbot-nginx
-
-# SSL 인증서 발급 (각 도메인별로)
-sudo certbot --nginx -d www.innopackage.com
-sudo certbot --nginx -d d.innopackage.com
-sudo certbot --nginx -d s.innopackage.com
-
-# 자동 갱신 설정
-sudo systemctl enable certbot.timer
-```
-
-#### Step 8: 배포 확인 및 테스트
-
-```bash
-# 1. 서비스 상태 확인
-sudo systemctl status mes
-sudo systemctl status nginx
-
-# 2. 애플리케이션 헬스체크
-curl http://localhost:8080/actuator/health
-
-# 3. 웹 브라우저에서 접속 확인
-# https://www.innopackage.com
-# https://d.innopackage.com
-# https://s.innopackage.com
-
-# 4. 로그 확인 (문제 발생 시)
-sudo journalctl -u mes -n 50
-sudo tail -f /var/log/nginx/error.log
-```
-
-## 📊 운영 및 모니터링
-
-### 실시간 모니터링
-
-```bash
-# 서비스 상태 모니터링
-watch -n 2 'sudo systemctl status mes nginx mysql'
-
-# 리소스 사용량 모니터링
-htop  # 또는 top
-
-# 디스크 사용량 확인
-df -h
-
-# 메모리 사용량 확인
-free -h
-
-# 애플리케이션 로그 실시간 확인
-sudo journalctl -u mes -f
-
-# Nginx 액세스 로그 실시간 확인
-sudo tail -f /var/log/nginx/access.log
-```
-
-### 로그 관리
-
-```bash
-# 특정 기간 로그 조회
-sudo journalctl -u mes --since "2024-01-01" --until "2024-01-02"
-
-# 에러 로그만 필터링
-sudo journalctl -u mes -p err
-
-# 로그 파일 로테이션 설정
-sudo nano /etc/logrotate.d/mes
-```
-
-### 백업 전략
-
-```bash
-# 데이터베이스 백업
-mysqldump -u mes_user -p mes_db > backup_$(date +%Y%m%d).sql
-
-# 자동 백업 스크립트 (crontab에 추가)
-0 2 * * * mysqldump -u mes_user -p'password' mes_db > /backup/mes_db_$(date +\%Y\%m\%d).sql
-```
-
-## 🔧 트러블슈팅 가이드
-
-### 자주 발생하는 문제와 해결 방법
-
-#### 1. 포트 충돌 문제
-
-```bash
-# 증상: "Address already in use" 에러
-# 해결:
-sudo lsof -i :8080  # 포트 사용 프로세스 확인
-sudo kill -9 <PID>  # 프로세스 종료
-sudo systemctl restart mes  # 서비스 재시작
-```
-
-#### 2. 메모리 부족 (t3.micro)
-
-```bash
-# 증상: "OutOfMemoryError" 또는 서비스 중단
-# 해결: Swap 메모리 추가
-sudo dd if=/dev/zero of=/swapfile bs=128M count=16
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-
-# JVM 메모리 설정 조정
-sudo nano /etc/systemd/system/mes.service
-# ExecStart에 -Xmx512m -Xms256m 추가
-```
-
-#### 3. MySQL 연결 실패
-
-```bash
-# 증상: "Communications link failure"
-# 해결:
-sudo systemctl status mysql  # MySQL 상태 확인
-sudo systemctl restart mysql  # MySQL 재시작
-
-# 연결 테스트
-mysql -u mes_user -p -h localhost mes_db
-
-# 권한 확인
-SHOW GRANTS FOR 'mes_user'@'localhost';
-```
-
-#### 4. Nginx 502 Bad Gateway
-
-```bash
-# 증상: 브라우저에서 502 에러
-# 해결:
-sudo systemctl status mes  # Backend 서비스 확인
-sudo systemctl restart mes  # Backend 재시작
-sudo nginx -t  # Nginx 설정 검증
-sudo systemctl restart nginx  # Nginx 재시작
-```
-
-#### 5. 파일 권한 문제
-
-```bash
-# 증상: "Permission denied" 에러
-# 해결:
-sudo chown -R ubuntu:ubuntu /opt/mes
-chmod +x backend/mvnw
-chmod 755 backend/scripts/*.sh
-```
-
-## 👤 사용자 권한
-
-| 역할        | 권한                                            |
-| ----------- | ----------------------------------------------- |
-| **ADMIN**   | 시스템 전체 관리, 사용자 관리, 모든 데이터 접근 |
-| **MANAGER** | 작업 지시서 관리, 이슈 할당, 보고서 조회        |
-| **WORKER**  | 할당된 작업 수행, 이슈 보고, 작업 로그 작성     |
-
-### 테스트 계정
-
-- Admin: `admin@mes.com` / `admin123`
-- Manager: `manager@mes.com` / `manager123`
-- Worker: `worker@mes.com` / `worker123`
-
-## 📝 API 문서
-
-주요 API 엔드포인트:
-
-- `/api/auth/*` - 인증 관련
-- `/api/users/*` - 사용자 관리
-- `/api/work-orders/*` - 작업 지시서 관리
-- `/api/issues/*` - 이슈 관리
-- `/api/dashboard/*` - 대시보드 통계
-- `/api/work-logs/*` - 작업 로그
-
-## 🤝 기여하기
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### 커밋 메시지 규칙
+## 커밋 메시지 규칙
 
 ```
 feat: 새로운 기능 추가
@@ -640,41 +229,6 @@ test: 테스트 코드
 chore: 빌드 업무 수정
 ```
 
-## 🚀 성능 최적화 팁
+## 라이선스
 
-### Backend 최적화
-
-- JVM 힙 메모리 조정: `-Xmx1g -Xms512m`
-- 데이터베이스 커넥션 풀 설정: `spring.datasource.hikari.maximum-pool-size=20`
-- 캐싱 활성화: Spring Cache 또는 Redis 사용
-
-### Frontend 최적화
-
-- 프로덕션 빌드: `npm run build`
-- Gzip 압축 활성화 (Nginx)
-- 이미지 최적화 및 Lazy Loading
-
-### 데이터베이스 최적화
-
-- 인덱스 생성: 자주 조회되는 컬럼
-- 쿼리 최적화: EXPLAIN 분석
-- 정기적인 백업 및 정리
-
-## 📚 추가 리소스
-
-- [Spring Boot 공식 문서](https://spring.io/projects/spring-boot)
-- [React 공식 문서](https://react.dev)
-- [Docker 가이드](https://docs.docker.com)
-- [AWS EC2 문서](https://docs.aws.amazon.com/ec2/)
-
-## 📄 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 있습니다.
-
-## 📞 문의
-
-프로젝트 관련 문의사항은 이슈 트래커를 통해 등록해 주세요.
-
----
-
-💡 **Pro Tip**: 개발 환경 설정 시 문제가 발생하면 `./mvnw clean` (Backend) 또는 `rm -rf node_modules && npm install` (Frontend)를 실행해보세요.
+MIT License

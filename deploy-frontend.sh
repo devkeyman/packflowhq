@@ -22,7 +22,7 @@ echo "✅ 빌드 완료"
 
 # 2. 서버로 전송
 echo "📤 2/3. 서버로 파일 전송 중..."
-rsync -avz --delete -e "ssh -i $PEM_FILE -o StrictHostKeyChecking=no" dist/ "$SERVER:$REMOTE_DIR/"
+rsync -avz --delete --rsync-path="sudo rsync" -e "ssh -i $PEM_FILE -o StrictHostKeyChecking=no" dist/ "$SERVER:$REMOTE_DIR/"
 echo "✅ 파일 전송 완료"
 
 # 3. 권한 설정 및 nginx reload

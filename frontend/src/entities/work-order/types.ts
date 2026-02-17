@@ -81,6 +81,22 @@ export interface CreateWorkOrderResponse {
   createdAt: string;
 }
 
+// 일괄 등록 개별 결과
+export interface BulkCreateResultItem {
+  row: number;
+  success: boolean;
+  workOrderNo?: string;
+  error?: string;
+}
+
+// 일괄 등록 응답
+export interface BulkCreateResponse {
+  totalCount: number;
+  successCount: number;
+  failureCount: number;
+  results: BulkCreateResultItem[];
+}
+
 // API 검증 실패 정보
 export interface ValidationResult {
   code: string;

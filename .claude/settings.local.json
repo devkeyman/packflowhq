@@ -8,7 +8,8 @@
       "Bash(./mvnw clean compile:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run lint:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
