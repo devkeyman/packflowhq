@@ -228,7 +228,3 @@ refactor: 코드 리팩토링
 test: 테스트 코드
 chore: 빌드 업무 수정
 ```
-
-## 라이선스
-
-MIT License
