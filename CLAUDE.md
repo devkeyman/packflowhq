@@ -4,172 +4,141 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Innopackage Smart Factory MES (Manufacturing Execution System) - A monorepo containing both frontend (React) and backend (Spring Boot) for production management, work order tracking, and quality issue monitoring.
+Innopackage Smart Factory MES (Manufacturing Execution System) - A monorepo containing frontend (React) and backend (Spring Boot) for production management and work order tracking.
+
+## Prerequisites
+
+- Java 17+, Node.js 18+, MySQL 8.0+
+
+**Database setup:**
+```sql
+CREATE DATABASE mes_db_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'inno0000';
+GRANT ALL PRIVILEGES ON mes_db_dev.* TO 'admin'@'localhost';
+```
 
 ## Essential Commands
 
 ### Development
 
 ```bash
-# Backend (Spring Boot)
+# Backend (Spring Boot) - port 8080
 cd backend
-./mvnw spring-boot:run              # Run Spring Boot server (port 8080)
-./mvnw clean install                # Build backend
-./mvnw test                         # Run backend tests
-./mvnw test -Dtest=ClassName       # Run single test class
+./mvnw spring-boot:run
+./mvnw test                              # Run all tests
+./mvnw test -Dtest=ClassName             # Run single test class
 ./mvnw test -Dtest=ClassName#methodName  # Run single test method
 
-# Frontend (React/Vite)
+# Frontend (React/Vite) - port 5173
 cd frontend
-npm run dev                         # Run Vite dev server (port 5173)
-npm run build                       # Production build
-npm run preview                     # Preview production build locally
-npm run lint                        # ESLint check
-npm run type-check                  # TypeScript check
+npm run dev
+npm run lint
+npm run type-check
 
-# Run both frontend and backend simultaneously
-./scripts/dev.sh                    # Launches both servers
+# Run both simultaneously (uses mvn, not mvnw)
+./scripts/dev.sh
 ```
 
-### Build & Deploy
+### Build
 
 ```bash
-# Backend build
-cd backend
-./mvnw clean package -DskipTests   # Create JAR file
+# Backend
+cd backend && ./mvnw clean package -DskipTests
 
-# Frontend build
-cd frontend
-npm run build                       # Standard build
-npm run build:ec2                   # Memory-optimized build for EC2
+# Frontend
+cd frontend && npm run build
 
-# Full project build (builds both and copies frontend to backend/static)
-./scripts/build.sh                  # Complete build script
+# Full project (builds both, copies frontend to backend/static)
+./scripts/build.sh
 ```
 
 ## Architecture Overview
 
-### Backend (Spring Boot)
-
-**Architecture**: Hexagonal Architecture (Port & Adapter Pattern)
+### Backend: Hexagonal Architecture (Port & Adapter)
 
 ```
 backend/src/main/java/com/mes/
-├── adapter/           # External adapters
-│   ├── in/web/       # REST controllers, request/response DTOs
+├── adapter/
+│   ├── in/web/           # REST controllers, request/response DTOs
 │   └── out/persistence/  # JPA repositories, entities
-├── application/       # Application services
-│   ├── port/         # Port interfaces (in/out)
-│   └── service/      # Use case implementations
-├── domain/           # Domain models and business logic
-│   ├── model/        # Domain models
-│   └── service/      # Domain services
-├── config/           # Spring configurations (Security, CORS, etc.)
-└── common/           # Shared utilities
-    ├── dto/          # Data transfer objects
-    ├── exception/    # Exception handling
-    └── mapper/       # Object mappers
+├── application/
+│   ├── port/             # Port interfaces (in/out)
+│   └── service/          # Use case implementations
+├── domain/
+│   ├── model/            # Domain models
+│   └── service/          # Domain services
+├── config/               # Spring configurations
+└── common/               # DTOs, exceptions, mappers
 ```
 
-**Key Technologies**:
-- Spring Boot 3.5.4, Java 17
-- Spring Security + JWT authentication
-- Spring Data JPA with MySQL
-- Maven for dependency management
-- Lombok for boilerplate reduction
+**Stack**: Spring Boot 3.5, Java 17, Spring Security + JWT, Spring Data JPA, MySQL, Lombok
 
-### Frontend (React/TypeScript)
-
-**Architecture**: Feature-Sliced Design (FSD)
+### Frontend: Feature-Sliced Design (FSD)
 
 ```
 frontend/src/
-├── app/              # Application setup, routing, providers
-├── pages/            # Page components
-├── widgets/          # Complex UI blocks
-├── features/         # Business logic and hooks
-├── entities/         # Domain models and types
-└── shared/           # Shared utilities and components
-    ├── api/          # API clients and endpoints
-    ├── components/   # Reusable UI components
-    ├── config/       # App configuration
-    └── stores/       # Zustand stores
+├── app/        # Routing, providers
+├── pages/      # Page components
+├── widgets/    # Complex UI blocks
+├── features/   # Business logic, hooks
+├── entities/   # Domain models, types
+└── shared/     # API clients, UI components, stores
 ```
 
-**Key Technologies**:
-- React 19.1.1 with TypeScript 5.9.2
-- Vite for bundling
-- TanStack Query for server state
-- Zustand for client state
-- Tailwind CSS + shadcn/ui components
+**Import rule**: `app → pages → widgets → features → entities → shared` (higher layers import from lower only)
+
+**Path aliases**: All imports use `@/` prefix (`@/shared`, `@/features`, etc.)
+
+**Stack**: React 19, TypeScript 5, Vite, TanStack Query, Zustand, Tailwind CSS + shadcn/ui
 
 ## API Structure
 
 Base URL: `http://localhost:8080/api`
 
-### Main Endpoints
+| Endpoint | Description |
+|----------|-------------|
+| `/auth/*` | Authentication (login, refresh, logout) |
+| `/users/*` | User management |
+| `/work-orders/*` | Work order CRUD and status management |
+| `/dashboard/*` | Statistics and summaries |
 
-- `/auth/*` - Authentication (login, refresh, logout)
-- `/users/*` - User management
-- `/work-orders/*` - Work order CRUD and status management
-- `/issues/*` - Quality issue tracking
-- `/dashboard/*` - Dashboard statistics and summaries
-- `/work-logs/*` - Activity logging
-
-### Request/Response Format
-
-- Content-Type: `application/json`
-- Pagination: `page` (0-indexed), `size`, `sort` query parameters
-- Error format: `{ "message": "error description", "status": 400 }`
-
-### Authentication
-
-JWT-based authentication with access/refresh tokens:
-- Access token in Authorization header: `Bearer {token}`
-- Automatic token refresh on 401 responses
-- Role-based access control: ADMIN, MANAGER, WORKER
-
-## Database Configuration
-
-### Development (application-dev.yml)
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/mes_db_dev
-    username: admin
-    password: inno0000
-```
-
-### Production (application-prod.yml)
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/mes_db
-    username: mes_user
-    password: [configured on server]
-```
+- **Auth**: JWT Bearer token in `Authorization` header
+- **Pagination**: `page` (0-indexed), `size`, `sort` query params
+- **Error format**: `{ "message": "...", "status": 400 }`
 
 ## Key Business Entities
 
 ### WorkOrder
-- Status: `PENDING`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
-- Priority: `LOW`, `NORMAL`, `MEDIUM`, `HIGH`, `URGENT`
-
-### Issue
-- Status: `OPEN`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`
-- Priority: `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`
-- Type: `EQUIPMENT`, `QUALITY`, `SAFETY`, `PROCESS`, `OTHER`
+- **Status**: `PENDING`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`
+- **Priority**: `LOW`, `NORMAL`, `MEDIUM`, `HIGH`, `URGENT`
 
 ### User
-- Roles: `ADMIN`, `MANAGER`, `WORKER`
-- WORKER can only access assigned work orders
+- **Roles**: `ADMIN` (full access), `MANAGER` (work order management), `WORKER` (assigned work only)
 
-## Development Workflow
+## Code Style
 
-1. **Backend changes**: Modify code in `backend/src`, Spring Boot DevTools will auto-reload
-2. **Frontend changes**: Modify code in `frontend/src`, Vite HMR will auto-reload
-3. **API changes**: Update both backend controllers and frontend API clients
-4. **Database changes**: Update JPA entities, then run application to auto-migrate
+### Backend (Java)
+- Package names: lowercase (`com.mes.domain.model`)
+- Classes: PascalCase (`WorkOrder`)
+- Methods/variables: camelCase (`getUserById`)
+- Use Lombok annotations
+
+### Frontend (TypeScript)
+- Files/folders: kebab-case (`work-order-form.tsx`)
+- Components: PascalCase (`WorkOrderForm`)
+- Hooks: camelCase with `use` prefix (`useWorkOrders`)
+
+## Commit Message Convention
+
+```
+feat: 새로운 기능 추가
+fix: 버그 수정
+docs: 문서 수정
+style: 코드 포맷팅
+refactor: 코드 리팩토링
+test: 테스트 코드
+chore: 빌드 업무 수정
+```
 
 ## Testing Accounts
 
@@ -177,51 +146,14 @@ spring:
 - Manager: `manager@mes.com` / `manager123`
 - Worker: `worker@mes.com` / `worker123`
 
-## Code Style Guidelines
+## Backend DTO/UseCase Naming
 
-### Backend (Java)
-- Package names: lowercase (`com.mes.domain.model`)
-- Classes: PascalCase (`WorkOrder`)
-- Methods/variables: camelCase (`getUserById`)
-- Use Lombok annotations to reduce boilerplate
+| Type | Pattern | Example |
+|------|---------|---------|
+| Create Request | `Create{Entity}Request` | `CreateWorkOrderRequest` |
+| Update Request | `Update{Entity}Request` | `UpdateWorkOrderRequest` |
+| Detail Response | `{Entity}DetailResponse` | `WorkOrderDetailResponse` |
+| List Response | `{Entity}ListResponse` | `WorkOrderListResponse` |
+| UseCase | `{Entity}UseCase` | `WorkOrderUseCase` |
 
-### Frontend (TypeScript)
-- Files/folders: kebab-case (`work-order-form.tsx`)
-- Components: PascalCase (`WorkOrderForm`)
-- Hooks: camelCase with `use` prefix (`useWorkOrders`)
-- Avoid `any` type, use proper TypeScript types
-
-## Important Files
-
-- `backend/pom.xml` - Maven dependencies and build config
-- `backend/src/main/resources/application.yml` - Spring Boot config
-- `frontend/package.json` - NPM dependencies
-- `frontend/vite.config.ts` - Vite build config
-- `API_INTERFACE.md` - Complete API documentation
-- `README.md` - Detailed setup and deployment guide
-
-## Deployment
-
-The application is deployed on AWS EC2 (Ubuntu):
-- Production URL: https://www.innopackage.com
-- Backend runs as systemd service on port 8080
-- Frontend served by Nginx, proxies `/api/*` to backend
-- SSL certificates managed by Certbot
-
-### Quick Deploy Commands
-
-```bash
-# SSH to server
-ssh -i your-key.pem ubuntu@your-ec2-instance
-
-# Deploy backend
-sudo systemctl stop mes-backend
-scp target/mes-backend-0.0.1-SNAPSHOT.jar ubuntu@server:/home/ubuntu/
-sudo systemctl start mes-backend
-
-# Deploy frontend
-npm run build:ec2
-scp -r dist/* ubuntu@server:/var/www/html/
-```
-
-For detailed deployment instructions, see README.md sections on EC2 deployment.
+**Development order for new API**: Domain Model → Entity → Port Out → Repository → Port In (UseCase) → Service → Request/Response DTO → Controller → Tests

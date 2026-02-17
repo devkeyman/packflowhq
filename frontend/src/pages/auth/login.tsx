@@ -175,10 +175,6 @@ export const LoginPage: React.FC = () => {
                 <span className="font-medium">관리자:</span>
                 <span>admin@mes.com / admin123</span>
               </div>
-              <div className="flex justify-between">
-                <span className="font-medium">작업자:</span>
-                <span>worker@mes.com / worker123</span>
-              </div>
             </div>
           </div>
         </Card>

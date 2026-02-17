@@ -37,26 +37,39 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // 403 Forbidden - 권한 없음
+    if (error.response?.status === 403) {
+      alert("권한이 없습니다.");
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
+      const { refreshToken } = useAuthStore.getState();
+
+      // refreshToken이 없으면 바로 로그아웃 처리
+      if (!refreshToken) {
+        useAuthStore.getState().logout();
+        window.location.href = "/login";
+        return Promise.reject(error);
+      }
+
       try {
-        const { refreshToken } = useAuthStore.getState();
-        if (refreshToken) {
-          const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/refresh`, {
-            refreshToken,
-          });
+        const response = await axios.post<AuthResponse>(`${API_BASE_URL}/auth/refresh`, {
+          refreshToken,
+        });
 
-          const { token, refreshToken: newRefreshToken } = response.data;
-          useAuthStore.getState().setTokens(token, newRefreshToken);
+        const { token, refreshToken: newRefreshToken } = response.data;
+        useAuthStore.getState().setTokens(token, newRefreshToken);
 
-          originalRequest.headers.Authorization = `Bearer ${token}`;
-          return apiClient(originalRequest);
-        }
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        return apiClient(originalRequest);
       } catch (refreshError) {
         // 리프레시 토큰도 만료된 경우 로그아웃
         useAuthStore.getState().logout();
         window.location.href = "/login";
+        return Promise.reject(refreshError);
       }
     }
 

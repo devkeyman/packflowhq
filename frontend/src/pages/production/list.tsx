@@ -1,9 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
+import { useWorkOrders } from "@/features/work-order";
+import { WorkOrderTable } from "@/widgets/work-order-table";
 
 const ProductionListPage: React.FC = () => {
   const navigate = useNavigate();
+  const { data: workOrders = [], isLoading, isError } = useWorkOrders();
 
   return (
     <div className="space-y-8">
@@ -20,7 +23,13 @@ const ProductionListPage: React.FC = () => {
       </header>
 
       <main className="space-y-8">
-        {/* Production list table will be here */}
+        {isError ? (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-sm text-red-600">데이터를 불러오는데 실패했습니다.</p>
+          </div>
+        ) : (
+          <WorkOrderTable data={workOrders} isLoading={isLoading} />
+        )}
       </main>
     </div>
   );

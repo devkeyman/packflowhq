@@ -1,44 +1,30 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "@/shared/components/ui/button";
+import { useParams } from "react-router-dom";
+import { useWorkOrder } from "@/features/work-order";
+import { WorkOrderDetail } from "@/widgets/work-order-detail";
 
 const ProductionDetailPage: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const workOrderId = Number(id);
+  const { data: workOrder, isLoading, isError } = useWorkOrder(workOrderId);
 
-  const handleDelete = () => {
-    // Delete logic will be here
-    console.log("Delete production:", id);
-  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <p className="text-sm text-gray-500">로딩 중...</p>
+      </div>
+    );
+  }
 
-  return (
-    <div className="space-y-8">
-      <header className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">작업 지시서 상세</h1>
-            <p className="mt-1 text-sm text-gray-500">작업 지시서 상세 정보를 확인합니다</p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/production")}>
-              목록
-            </Button>
-            <Button variant="outline" onClick={() => navigate(`/production/${id}/edit`)}>
-              수정
-            </Button>
-            <Button variant="destructive" onClick={handleDelete}>
-              삭제
-            </Button>
-          </div>
-        </div>
-      </header>
+  if (isError || !workOrder) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+        <p className="text-sm text-red-600">작업 지시서를 불러오는데 실패했습니다.</p>
+      </div>
+    );
+  }
 
-      <main className="space-y-8">
-        {/* Production detail will be here */}
-        <p className="text-sm text-gray-500">작업 지시서 ID: {id}</p>
-      </main>
-    </div>
-  );
+  return <WorkOrderDetail data={workOrder} />;
 };
 
 export default ProductionDetailPage;

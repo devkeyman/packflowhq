@@ -8,8 +8,6 @@ export const queryClient = new QueryClient({
       retry: 1,
       refetchOnWindowFocus: false,
     },
-    mutations: {
-      retry: 1,
-    },
+    // mutations는 기본값(retry: 0) 사용
   },
 });

@@ -1,4 +1,5 @@
 import React from "react";
+import { DashboardSummary } from "@/widgets/dashboard-summary";
 
 const DashboardPage: React.FC = () => {
   return (
@@ -20,8 +21,8 @@ const DashboardPage: React.FC = () => {
         </div>
       </header>
 
-      <main className="space-y-8">
-        {/* Main content here */}
+      <main>
+        <DashboardSummary />
       </main>
     </div>
   );

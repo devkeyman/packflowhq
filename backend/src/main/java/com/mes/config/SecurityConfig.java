@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -55,8 +56,6 @@ public class SecurityConfig {
                 .requestMatchers("/", "/index.html", "/static/**", "/assets/**").permitAll()
                 .requestMatchers("/login", "/signin", "/register").permitAll()  // 추가
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/test/**").permitAll()
-                .requestMatchers("/api/debug/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             );
@@ -78,7 +77,7 @@ public class SecurityConfig {
             "http://innopackage.com",
             "http://s.innopackage.com"
         ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);  // Preflight 캐시 시간 설정

@@ -1,3 +1,4 @@
 export { authApi } from "./auth";
-export { usersApi } from "./users";
+export { workOrdersApi } from "./work-orders";
+export { dashboardApi } from "./dashboard";
 export { default as apiClient } from "./client";
