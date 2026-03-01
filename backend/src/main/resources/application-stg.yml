@@ -46,16 +46,14 @@ server:
 logging:
     level:
         root: INFO
-        com.mes: INFO
+        com.packflowhq: INFO
         org.springframework.web: INFO
         org.springframework.security: INFO
         org.hibernate.SQL: WARN
     pattern:
         console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
     file:
-        name: logs/mes-stg.log
-        max-size: 50MB
-        max-history: 30
+        name: logs/packflowhq-stg.log
 
 # JWT Settings (스테이징용 - 중간 만료 시간)
 jwt:

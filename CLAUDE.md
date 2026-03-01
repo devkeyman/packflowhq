@@ -118,7 +118,7 @@ Base URL: `http://localhost:8080/api`
 ## Code Style
 
 ### Backend (Java)
-- Package names: lowercase (`com.mes.domain.model`)
+- Package names: lowercase (`com.packflowhq.domain.model`)
 - Classes: PascalCase (`WorkOrder`)
 - Methods/variables: camelCase (`getUserById`)
 - Use Lombok annotations
