@@ -6,8 +6,8 @@ PackFlow 스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관
 
 ```bash
 # 1. 프로젝트 클론
-git clone https://github.com/devkeyman/mes-inno.git
-cd mes-inno
+git clone https://github.com/devkeyman/packflowhq.git
+cd packflowhq
 
 # 2. Backend 실행
 cd backend
@@ -59,9 +59,9 @@ npm install && npm run dev
 ## 프로젝트 구조
 
 ```
-mes-inno/
+packflowhq/
 ├── backend/                    # Spring Boot 백엔드
-│   └── src/main/java/com/mes/
+│   └── src/main/java/com/packflow/
 │       ├── adapter/            # 어댑터 (Web Controller, Persistence)
 │       ├── application/        # 유스케이스, 서비스
 │       ├── domain/             # 도메인 모델
@@ -163,7 +163,7 @@ Base URL: `http://localhost:8080/api`
 
 ```bash
 # 전체 배포 (Backend + Frontend)
-./deploy.env
+./deploy.sh
 
 # 또는 개별 배포
 ./deploy-backend.sh
@@ -180,17 +180,17 @@ Base URL: `http://localhost:8080/api`
 **Frontend 배포 흐름** (`deploy-frontend.sh`):
 
 1. `npm run build` — 정적 파일 빌드
-2. `rsync` — `dist/`를 EC2 `/var/www/mes/frontend/`로 동기화
+2. `rsync` — `dist/`를 EC2 `/opt/packflowhq/frontend/`로 동기화
 3. `ssh` — 권한 설정 → Nginx reload
 
 **서버 정보**:
 
-| 항목 | 값 |
-|------|-----|
-| 호스트 | `ubuntu@13.209.192.235` |
-| PEM | `innopackage-smart-factory-mes.pem` (프로젝트 루트) |
-| Backend 경로 | `/opt/mes/` |
-| Frontend 경로 | `/var/www/mes/frontend/` |
+| 항목 | 값                          |
+|------|----------------------------|
+| 호스트 | `ubuntu@13.209.192.235`    |
+| PEM | `packflowhq.pem` |
+| Backend 경로 | `/opt/packflowhq/backend`  |
+| Frontend 경로 | `/opt/packflowhq/frontend/`   |
 
 ### 서버 구성
 
@@ -206,14 +206,14 @@ Base URL: `http://localhost:8080/api`
 
 ```bash
 # 서비스 상태 확인
-sudo systemctl status mes
+sudo systemctl status packflowhq
 sudo systemctl status nginx
 
 # 로그 확인
-sudo journalctl -u mes -f
+sudo journalctl -u packflowhq -f
 
 # 재시작
-sudo systemctl restart mes
+sudo systemctl restart packflowhq
 sudo systemctl restart nginx
 ```
 
