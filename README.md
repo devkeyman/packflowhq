@@ -157,7 +157,8 @@ Base URL: `http://localhost:8080/api`
 - **백엔드**: JAR 독립 실행 (Systemd 서비스)
 - **도메인**:
   - `www.packflowhq.com` - 메인 서비스
-  - `d.packflowhq.com` - 개발 환경
+  - `s.packflowhq.com` - 검증 환경(현재 미구현)
+  - `d.packflowhq.com` - 개발 환경(현재 미구현)
 
 ### EC2 배포 (Ubuntu)
 
