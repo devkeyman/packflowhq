@@ -3,7 +3,7 @@
 # ========================================
 spring:
     application:
-        name: mes-inno
+        name: packflowhq
     
     # 기본 활성 프로파일 설정 (개발 환경)
     profiles:
@@ -33,3 +33,10 @@ jwt:
     secret: 357638792F423F4528482B4D6251655468576D5A7134743777217A25432A462D4A614E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
     expiration: 86400000  # 24 hours in milliseconds
     refresh-expiration: 604800000  # 7 days in milliseconds
+
+management:
+    endpoints:
+        web:
+            base-path: /api/actuator
+            exposure:
+                include: health,info

@@ -5,7 +5,7 @@
 spring:
     # 데이터베이스 설정 (스테이징 DB)
     datasource:
-        url: jdbc:mysql://stg-db-server:3306/mes_db_stg?useSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+        url: jdbc:mysql://www.packflowhq.com:3306/mes_db_stg?useSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
         username: ${DB_USERNAME:mes_stg_user}  # 환경 변수 또는 기본값
         password: ${DB_PASSWORD:stg_password}  # 환경 변수 또는 기본값
         driver-class-name: com.mysql.cj.jdbc.Driver

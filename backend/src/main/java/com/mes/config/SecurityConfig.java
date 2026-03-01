@@ -53,16 +53,12 @@ public class SecurityConfig {
             .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // 정적/프론트는 nginx가 서빙하므로, 백엔드에서 굳이 열 필요는 없지만 남겨도 무해
-                .requestMatchers("/", "/index.html", "/static/**", "/assets/**").permitAll()
-                .requestMatchers("/login", "/signin", "/register").permitAll()
-                // 백엔드
-                .requestMatchers("/api/auth/**").permitAll()
-                // 운영 관측용
-                .requestMatchers("/actuator/health").permitAll()
-
-                .requestMatchers("/error").permitAll()
-                .anyRequest().authenticated()
+              .requestMatchers("/", "/index.html", "/static/**", "/assets/**").permitAll()
+              .requestMatchers("/login", "/signin", "/register").permitAll()
+              .requestMatchers("/api/auth/**").permitAll()
+              .requestMatchers("/api/actuator/health").permitAll()   // ✅ 추가
+              .requestMatchers("/error").permitAll()
+              .anyRequest().authenticated()
             );
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
