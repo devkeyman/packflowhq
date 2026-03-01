@@ -1,7 +1,7 @@
 # API Interface Documentation
 
 ## 개요
-이 문서는 MES Innopackage 시스템의 Frontend와 Backend 간 API 인터페이스를 정의합니다.
+이 문서는 MES PackFlow 시스템의 Frontend와 Backend 간 API 인터페이스를 정의합니다.
 
 - **Base URL**: `http://localhost:8080/api`
 - **인증 방식**: JWT Bearer Token
@@ -708,4 +708,4 @@
 2. 토큰 만료 시 401 응답과 함께 refresh token으로 갱신 필요
 3. WORKER 권한 사용자는 자신에게 할당된 작업 지시서만 조회/수정 가능
 4. 비밀번호는 모든 요청/응답에서 제외 (생성/수정 시 제외)
-5. 실시간 업데이트가 필요한 경우 WebSocket 구현 고려
+5. 실시간 업데이트가 필요한 경우 WebSocket 구현 예정

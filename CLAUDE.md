@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Innopackage Smart Factory MES (Manufacturing Execution System) - A monorepo containing frontend (React) and backend (Spring Boot) for production management and work order tracking.
+PackFlow Smart Factory MES (Manufacturing Execution System) - A monorepo containing frontend (React) and backend (Spring Boot) for production management and work order tracking.
 
 ## Prerequisites
 

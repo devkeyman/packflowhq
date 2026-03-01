@@ -1,6 +1,6 @@
 # MES 시스템 피그마 설계 문서
 
-Innopackage Smart Factory MES 시스템의 피그마 설계안 작성을 위한 참조 문서입니다.
+PackFlow Smart Factory MES 시스템의 피그마 설계안 작성을 위한 참조 문서입니다.
 
 ## 문서 구조
 

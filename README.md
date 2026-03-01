@@ -1,6 +1,6 @@
-# Innopackage - Smart Factory MES
+# PackFlow - Smart Factory MES
 
-이노패키지 스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관리 및 작업 지시 추적을 위한 웹 기반 플랫폼
+PackFlow 스마트 팩토리를 위한 제조 실행 시스템(MES) - 생산 관리 및 작업 지시 추적을 위한 웹 기반 플랫폼
 
 ## Quick Start
 
@@ -156,8 +156,8 @@ Base URL: `http://localhost:8080/api`
 - **프론트엔드**: Nginx 정적 파일 서빙
 - **백엔드**: JAR 독립 실행 (Systemd 서비스)
 - **도메인**:
-  - `www.innopackage.com` - 메인 서비스
-  - `d.innopackage.com` - 개발 환경
+  - `www.packflowhq.com` - 메인 서비스
+  - `d.packflowhq.com` - 개발 환경
 
 ### EC2 배포 (Ubuntu)
 

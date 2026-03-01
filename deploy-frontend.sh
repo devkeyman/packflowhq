@@ -37,4 +37,4 @@ echo "✅ 서버 설정 완료"
 
 echo "================================"
 echo "🎉 Frontend 배포 완료!"
-echo "🔗 https://www.innopackage.com"
+echo "🔗 https://www.packflowhq.com"

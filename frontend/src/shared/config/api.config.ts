@@ -7,13 +7,13 @@ const getEnvironment = (): Environment => {
     return "local";
     // return "dev";
   } else if (
-    hostname === "www.innopackage.com" ||
-    hostname === "innopackage.com"
+    hostname === "www.packflowhq.com" ||
+    hostname === "packflowhq.com"
   ) {
     return "prod";
-  } else if (hostname === "s.innopackage.com") {
+  } else if (hostname === "s.packflowhq.com") {
     return "stg";
-  } else if (hostname === "d.innopackage.com") {
+  } else if (hostname === "d.packflowhq.com") {
     return "dev";
   }
 
@@ -22,9 +22,9 @@ const getEnvironment = (): Environment => {
 };
 
 const ROOT_URLS: Record<Environment, string> = {
-  prod: "http://www.innopackage.com",
-  stg: "http://s.innopackage.com",
-  dev: "http://d.innopackage.com",
+  prod: "http://www.packflowhq.com",
+  stg: "http://s.packflowhq.com",
+  dev: "http://d.packflowhq.com",
   local: "http://localhost:8080",
 };
 

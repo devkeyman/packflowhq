@@ -1,5 +1,5 @@
 -- =====================================================
--- Innopackage Smart Factory MES Database Schema
+-- PackFlow Smart Factory MES Database Schema
 -- =====================================================
 --
 -- 참고: 이 파일은 스키마 문서용입니다.

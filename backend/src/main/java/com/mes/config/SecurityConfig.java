@@ -71,11 +71,11 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:3000",
             "http://localhost:5173",
-            "http://d.innopackage.com",
-            "http://www.innopackage.com",
-            "https://www.innopackage.com",
-            "http://innopackage.com",
-            "http://s.innopackage.com"
+            "http://d.packflowhq.com",
+            "http://www.packflowhq.com",
+            "https://www.packflowhq.com",
+            "http://packflowhq.com",
+            "http://s.packflowhq.com"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(Arrays.asList("*"));

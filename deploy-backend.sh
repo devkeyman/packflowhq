@@ -65,4 +65,4 @@ fi
 
 echo "================================"
 echo "🎉 배포 완료!"
-echo "🔗 http://www.innopackage.com"
+echo "🔗 http://www.packflowhq.com"
