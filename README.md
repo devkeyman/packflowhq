@@ -163,7 +163,7 @@ Base URL: `http://localhost:8080/api`
 
 ```bash
 # 전체 배포 (Backend + Frontend)
-./deploy-all.sh
+./deploy.env
 
 # 또는 개별 배포
 ./deploy-backend.sh

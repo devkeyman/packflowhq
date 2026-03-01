@@ -79,6 +79,11 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  const fillCredentials = (email: string, pass: string) => {
+    setFormData({ email, password: pass });
+    setErrors({});
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -168,13 +173,33 @@ export const LoginPage: React.FC = () => {
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <p className="text-sm font-medium text-gray-700 mb-3 text-center">
-              테스트 계정
+              테스트 계정 (클릭하여 자동 입력)
             </p>
             <div className="space-y-2 text-sm text-gray-600">
-              <div className="flex justify-between">
-                <span className="font-medium">관리자:</span>
+              <button
+                type="button"
+                onClick={() => fillCredentials("admin@mes.com", "admin123")}
+                className="w-full flex justify-between items-center p-2 hover:bg-gray-100 rounded transition-colors text-left"
+              >
+                <span className="font-medium">관리자 (Admin)</span>
                 <span>admin@mes.com / admin123</span>
-              </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillCredentials("manager@mes.com", "manager123")}
+                className="w-full flex justify-between items-center p-2 hover:bg-gray-100 rounded transition-colors text-left"
+              >
+                <span className="font-medium">매니저 (Manager)</span>
+                <span>manager@mes.com / manager123</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillCredentials("worker@mes.com", "worker123")}
+                className="w-full flex justify-between items-center p-2 hover:bg-gray-100 rounded transition-colors text-left"
+              >
+                <span className="font-medium">작업자 (Worker)</span>
+                <span>worker@mes.com / worker123</span>
+              </button>
             </div>
           </div>
         </Card>

@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mes</groupId>
-	<artifactId>mes-inno</artifactId>
+	<artifactId>packflowhq</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mes-inno</name>
 	<description>Demo project for Spring Boot</description>
